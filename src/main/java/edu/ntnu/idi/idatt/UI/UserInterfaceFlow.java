@@ -3,8 +3,11 @@ package edu.ntnu.idi.idatt.UI;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Groceries;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Grocery;
+import edu.ntnu.idi.idatt.Utils.InterfaceTextSource;
 
 import java.util.Scanner;
+
+import static edu.ntnu.idi.idatt.Utils.InterfaceTextSource.welcome;
 
 /**
  * All commands and instructions are handled within this class.
@@ -25,14 +28,6 @@ public class UI {
 
   public void start() {
     printMenu();
-  }
-
-  /**
-   * This prints out a nice welcoming message to indicate the program is ready.
-   */
-  public void welcome() {
-    System.out.println("Welcome to your new favorite food-application!");
-    System.out.println("What do you want to do today?\n");
   }
 
   /**
