@@ -34,6 +34,7 @@ public class Groceries {
     this.addGrocery(groceryName, quantity, expirationDate, groceryPrice);
   }
 
+  // TODO: rename to something else
   @Override
   public String toString() {
     // Made partially by AI-prompt in ChatGPT.

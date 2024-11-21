@@ -40,7 +40,7 @@ public class Grocery {
     this.price = price;
   }
 
-  // TODO: create a nice toString()
+  // TODO: create a nice toString(), and rename to something else
   @Override
   public String toString() {
     return this.groceryType;
