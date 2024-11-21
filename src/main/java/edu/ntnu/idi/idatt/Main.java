@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
-import edu.ntnu.idi.idatt.UI.UI;
+import edu.ntnu.idi.idatt.UI.UserInterfaceFlow;
 
 /**
  * This is the client-program from where everything is run.
@@ -9,10 +8,10 @@ import edu.ntnu.idi.idatt.UI.UI;
 public class Main {
 
   /**
-   * This is the origin of the program from where it branches.
+   * This is the function that runs when program starts.
    */
   public static void main(String[] args) {
-    UI ui = new UI();
+    UserInterfaceFlow ui = new UserInterfaceFlow();
     ui.init();
     ui.start();
   }
