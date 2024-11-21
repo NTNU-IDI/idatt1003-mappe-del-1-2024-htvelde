@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.UserInterface;
+package edu.ntnu.idi.idatt.UI;
 
 import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Groceries;
@@ -9,18 +9,22 @@ import java.util.Scanner;
 /**
  * All commands and instructions are handled within this class.
  */
-public class UserInterface {
-  Scanner scanner = new Scanner(System.in);
+public class UI {
+  Scanner scanner;
   FoodStorage foodStorage;
   int userInput;
 
   /**
-   * Initialize the UserInterface with a FoodStorage to handle all user input.
-   *
-   * @param foodStorage : The food storage in question
+   * Initialize the UI with a FoodStorage to handle all user input.
    */
-  public UserInterface(FoodStorage foodStorage) {
-    this.foodStorage = foodStorage;
+  public void init() {
+    new Scanner(System.in);
+    this.foodStorage = new FoodStorage();
+    welcome();
+  }
+
+  public void start() {
+    printMenu();
   }
 
   /**
