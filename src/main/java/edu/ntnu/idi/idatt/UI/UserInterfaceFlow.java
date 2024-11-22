@@ -1,11 +1,13 @@
 package edu.ntnu.idi.idatt.UI;
 
 import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
-import edu.ntnu.idi.idatt.Classes.FoodStorage.Groceries;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Grocery;
 
+import java.util.InputMismatchException;
+
+import static edu.ntnu.idi.idatt.UI.UserInterfacePrintOut.*;
+import static edu.ntnu.idi.idatt.UI.ValidateInput.*;
 import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.*;
-import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.welcome;
 
 /**
  * All commands and instructions are handled within this class.
@@ -13,7 +15,6 @@ import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.welcome;
 public class UserInterfaceFlow {
   FoodStorage foodStorage;
   UserInput input;
-  byte userInput;
 
   /**
    * Initialize the UI with a FoodStorage to handle all user input.
@@ -22,31 +23,27 @@ public class UserInterfaceFlow {
     // Initialize the FoodStorage-class, and the other UI-classes
     this.foodStorage = new FoodStorage();
     this.input = new UserInput();
-    welcome();
+    print(welcome());
   }
 
   public void start() {
-    mainMenu();
+    boolean running = true;
+    while (running) {
+      mainMenu();
+      running = false;
+    }
   }
 
   public void mainMenu() {
-    byte max = 7;
-
-    printMainMenu();
-    try {
-      userInput = input.inputNumber(max);
-    } catch (IllegalArgumentException e) {
-      userInput = max;
-      throw new IllegalArgumentException(e);
-    }
+    byte max = 6;
+    byte userInput = byteInput(max, printMainMenu());
 
     switch (userInput) {
       case 1 -> groceriesMenu();
       case 2 -> addGrocery();
       case 3 -> removeGrocery();
       case 4 -> searchGrocery();
-      case 5 -> printRecipes();
-      case 6 -> printRecipesMenu();
+      case 5 -> recipesMenu();
     }
   }
 
@@ -55,13 +52,7 @@ public class UserInterfaceFlow {
    */
   public void groceriesMenu() {
     byte max = 5;
-    printGroceriesMenu();
-    try {
-      userInput = input.inputNumber(max);
-    } catch (IllegalArgumentException e) {
-      userInput = max;
-      throw new IllegalArgumentException(e);
-    }
+    byte userInput = byteInput(max, printGroceriesMenu());
 
     switch (userInput) {
       case 1 -> addGrocery();
@@ -76,7 +67,6 @@ public class UserInterfaceFlow {
    * Prints all the groceries of a specified type.
    */
   public void searchGrocery() {
-
     // Builds a string-block from the groceries in the food storage
     String searchOptions = searchOptionsString(foodStorage);
 
@@ -98,17 +88,42 @@ public class UserInterfaceFlow {
   /**
    * Prints name of different recipes that you know.
    */
-  public void printRecipes() {
-    printRecipesMenu();
+  public void recipesMenu() {
+    byte max = 5;
+    byte userInput = byteInput(max, recipesMenuString());
+
+    switch (userInput) {
+      case 1 -> addRecipe();
+      case 2 -> removeRecipe();
+      case 3 -> searchRecipe();
+      case 4 -> suggestedRecipe();
+      default -> mainMenu();
+    }
+  }
+
+  private void addRecipe() {
+  }
+
+  private void removeRecipe() {
+  }
+
+  private void searchRecipe() {
+  }
+
+  private void suggestedRecipe() {
   }
 
   private void addGrocery() {
-    // Groceries(groceryType, unit, quantity, date, price)
-    requestGroceryType();
-    requestUnit();
-    requestQuantity();
-    requestDate();
-    requestPrice();
+    printRequest(requestGroceryType());
+    String typeName = input.inputString();
+    printRequest(requestUnit());
+    String unit = input.inputString();
+    printRequest(requestQuantity());
+    double quantity = input.inputDouble(10_000);
+    printRequest(requestDate());
+    String date = input.inputDate();
+    printRequest(requestPrice());
+    double price = input.inputDouble(10_000);
   }
 
   private void removeGrocery() {
@@ -122,5 +137,28 @@ public class UserInterfaceFlow {
 
   private double valueOfExpiredGroceries() {
     return 0.0;
+  }
+
+  private byte byteInput(byte max, String menu) {
+    byte userInput = 0;
+
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        userInput = input.inputNumber(max);
+        if (!isValidByte(max, userInput)) {
+          throw new IllegalArgumentException();
+        }
+        askAgain = false;
+      }
+      catch (IllegalArgumentException e) {
+        printUserInputError("Number not in valid range [1-" + max + "]");
+      }
+      catch (InputMismatchException e) {
+        printUserInputError("Not a valid number");
+      }
+    }
+    return userInput;
   }
 }
