@@ -14,10 +14,13 @@ public class UserInterfaceTextSource {
   private static final String CYAN = "\u001B[36m";
   private static final String WHITE = "\u001B[37m";
 
-  public static String clearConsole() {
+  public static void clearConsole() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
-    return "";
+  }
+
+  public static void prompt() {
+    System.out.print(">>> ");
   }
 
   public static void welcome() {
@@ -33,19 +36,25 @@ public class UserInterfaceTextSource {
    * The user is also taken here after exiting a deeper layer.
    */
   public static void printMainMenu() {
+    clearConsole();
+
     String menuString = """
-      [1] Look at the storage
+      [1] Access the storage
       [2] Add grocery to the storage
       [3] Remove grocery from the storage
       [4] Search for one specific grocery
       [5] View recipes
       [6] Use or change recipes
-      [7] Exit>>>\s""";
+      [7] Exit
+      """;
 
     System.out.println(menuString);
+    prompt();
   }
 
   public static void printGroceriesMenu() {
+    clearConsole();
+
     String groceriesMenu = """
       [1] Add grocery to food storage
       [2] Remove grocery from food storage
@@ -55,6 +64,7 @@ public class UserInterfaceTextSource {
       """;
 
     System.out.println(groceriesMenu);
+    prompt();
   }
 
   /**
@@ -91,5 +101,35 @@ public class UserInterfaceTextSource {
     System.out.println(firstPart + secondPart + thirdPart + lastPart);
 
     // TODO: Java-streams to print ALL GROCERIES
+  }
+
+  public static void requestGroceryType() {
+    String name = CYAN + "NAME" + RESET_COLOR;
+    System.out.println("Enter the " + name + " of the product");
+    prompt();
+  }
+
+  public static void requestUnit() {
+    String unit = CYAN + "UNIT" + RESET_COLOR;
+    System.out.println("Enter the " + unit + " of measurement of the product");
+    prompt();
+  }
+
+  public static void requestQuantity() {
+    String quantity = CYAN + "QUANTITY" + RESET_COLOR;
+    System.out.println("Enter the " + quantity + " of the product");
+    prompt();
+  }
+
+  public static void requestDate() {
+    String expirationDate = CYAN + "EXPIRATION DATE" + RESET_COLOR;
+    System.out.println("Enter the " + expirationDate + " of the product");
+    prompt();
+  }
+
+  public static void requestPrice() {
+    String price = CYAN + "PRICE" + RESET_COLOR;
+    System.out.println("Enter the " + price + " of the product");
+    prompt();
   }
 }

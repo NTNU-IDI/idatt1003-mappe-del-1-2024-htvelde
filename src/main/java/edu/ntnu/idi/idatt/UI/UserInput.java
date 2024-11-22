@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.UI;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserInput {
@@ -15,16 +16,11 @@ public class UserInput {
    * @throws IllegalArgumentException Raises exception if invalid input.
    */
   public byte inputNumber(int max) throws IllegalArgumentException {
-    try {
-      byte number;
-      number = scanner.nextByte();
-      if (number < 1 || number > max) {
-        throw new IllegalArgumentException("Entered number is out of valid range");
-      }
-      return number;
-    } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Expected input of type int, and this is not it");
-    }
+    byte number = 0;
+
+
+
+    return number;
   }
 
   /**

@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.UI;
 
 import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.Classes.FoodStorage.Groceries;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Grocery;
 
 import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.*;
@@ -67,6 +68,7 @@ public class UserInterfaceFlow {
       case 2 -> removeGrocery();
       case 3 -> searchGrocery();
       case 4 -> expiredGroceries();
+      default -> mainMenu();
     }
   }
 
@@ -101,7 +103,12 @@ public class UserInterfaceFlow {
   }
 
   private void addGrocery() {
-    System.out.println("Added groceries");
+    // Groceries(groceryType, unit, quantity, date, price)
+    requestGroceryType();
+    requestUnit();
+    requestQuantity();
+    requestDate();
+    requestPrice();
   }
 
   private void removeGrocery() {
