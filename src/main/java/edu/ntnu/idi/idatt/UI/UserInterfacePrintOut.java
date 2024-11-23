@@ -36,4 +36,8 @@ public class UserInterfacePrintOut {
   public static void printGroceriesMain(String groceriesString) {
     System.out.println(groceriesString);
   }
+
+  public static void printRequestSearchName(String requestSearchName) {
+    System.out.println(requestSearchName);
+  }
 }

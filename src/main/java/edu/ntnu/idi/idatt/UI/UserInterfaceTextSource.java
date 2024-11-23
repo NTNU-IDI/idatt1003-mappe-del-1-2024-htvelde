@@ -29,24 +29,24 @@ public class UserInterfaceTextSource {
    * Prints a main menu with the available actions.
    * The user is also taken here after exiting a deeper layer.
    */
-  public static String printMainMenu() {
+  public static String mainMenuText() {
     return """
       [1] Access the storage
       [2] Add grocery to the storage
       [3] Remove grocery from the storage
       [4] Search for one specific grocery
       [5] View recipes
-      [6] Exit
+      [6] Exit\r
       """;
   }
 
-  public static String printGroceriesMenu() {
+  public static String groceriesMenuText() {
     return """
       [1] Add grocery to food storage
       [2] Remove grocery from food storage
       [3] Search for a grocery from food storage
       [4] View expired groceries from food storage
-      [5] Exit to main menu
+      [5] Exit to main menu\r
       """;
   }
 
@@ -72,7 +72,7 @@ public class UserInterfaceTextSource {
     return stringBuilder.toString();
   }
 
-  public static String printAllGroceries(FoodStorage foodStorage) {
+  public static String allGroceriesString(FoodStorage foodStorage) {
 
     // In-the-moment trick to not surpass the col:100-rule
     String firstPart = "-".repeat(33) + "+";
@@ -107,5 +107,10 @@ public class UserInterfaceTextSource {
   public static String requestPrice() {
     String price = CYAN + "PRICE" + RESET_COLOR;
     return "Enter the " + price + " of the product";
+  }
+
+  public static String requestSearchName() {
+    String name = CYAN + "NAME" + RESET_COLOR;
+    return "Enter the " + name + " of the product you search for";
   }
 }

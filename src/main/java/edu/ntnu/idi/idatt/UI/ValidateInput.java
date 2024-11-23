@@ -10,7 +10,7 @@ public class ValidateInput {
     return input >= min && input <= max;
   }
 
-  public static boolean isValidDouble(double min, double max, int input) {
+  public static boolean isValidDouble(double min, double max, double input) {
     return input >= min && input <= max;
   }
 }
