@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.Classes.FoodStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This is THE STORAGE.
@@ -33,41 +34,32 @@ public class FoodStorage {
    */
   public void addToGroceries(String groceryType,
                               String unit,
-                              int quantity,
+                              double quantity,
                               LocalDate date,
                               double price) {
-    if (!storage.isEmpty()) {
-      int index = searchGroceries(groceryType);
+    int index = searchGroceries(groceryType);
+    if (index == -1) {
+      storage.add(new Groceries(groceryType, unit, quantity, date, price));
+    } else {
       storage.get(index).addGrocery(groceryType, quantity, date, price);
-      return;
     }
-    storage.add(new Groceries(groceryType, unit, quantity, date, price));
   }
 
   /**
    * Locates a grocery based on name only.
    *
-   * @param groceryName - The name you are searching for
+   * @param groceryName - The name of the items you can search for.
    * @return : Returns the first (and only) index of the sought after grocery.
    */
   public int searchGroceries(String groceryName) {
-    if (storage.isEmpty()) {
-      return -1;
-    } else {
-      for (int i = 0; i < storage.size(); i++) {
-        if (storage.get(i).getGroceryName().equalsIgnoreCase(groceryName)) {
-          return i;
-        }
-      }
+    Optional<Groceries> searchResult = storage.stream()
+        .filter(grocery -> grocery.getGroceryName().equals(groceryName))
+        .findFirst();
+
+    if (searchResult.isPresent()) {
+      System.err.println("Search result: " + searchResult.get());
+      return storage.indexOf(searchResult.get());
     }
     return -1;
-  }
-
-  //TODO: REMOVE AFTER TEST!
-  /**
-   * Simple test.
-   */
-  public void test() {
-    addToGroceries("Milk", "L", 1, LocalDate.now(), 21.5);
   }
 }
