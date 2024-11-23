@@ -3,9 +3,11 @@ package edu.ntnu.idi.idatt.UI;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
 import edu.ntnu.idi.idatt.Classes.FoodStorage.Grocery;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 
 import static edu.ntnu.idi.idatt.UI.UserInterfacePrintOut.*;
+import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.requestPrice;
 import static edu.ntnu.idi.idatt.UI.ValidateInput.*;
 import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.*;
 
@@ -30,13 +32,13 @@ public class UserInterfaceFlow {
     boolean running = true;
     while (running) {
       mainMenu();
-      running = false;
+      // running = false;
     }
   }
 
   public void mainMenu() {
     byte max = 6;
-    byte userInput = byteInput(max, printMainMenu());
+    byte userInput = byteInput(max, mainMenuText());
 
     switch (userInput) {
       case 1 -> groceriesMenu();
@@ -52,7 +54,7 @@ public class UserInterfaceFlow {
    */
   public void groceriesMenu() {
     byte max = 5;
-    byte userInput = byteInput(max, printGroceriesMenu());
+    byte userInput = byteInput(max, groceriesMenuText());
 
     switch (userInput) {
       case 1 -> addGrocery();
@@ -70,9 +72,9 @@ public class UserInterfaceFlow {
     // Builds a string-block from the groceries in the food storage
     String searchOptions = searchOptionsString(foodStorage);
 
-    System.out.println(searchOptions);
-    // TODO: Check for quit or similar
-    String searchString = "FIX";
+    print(searchOptions);
+    String searchString = input.inputString(2);
+
     int searchResult = foodStorage.searchGroceries(searchString.toLowerCase());
     if (searchResult == -1) {
       searchGrocery();
@@ -114,16 +116,13 @@ public class UserInterfaceFlow {
   }
 
   private void addGrocery() {
-    printRequest(requestGroceryType());
-    String typeName = input.inputString();
-    printRequest(requestUnit());
-    String unit = input.inputString();
-    printRequest(requestQuantity());
-    double quantity = input.inputDouble(10_000);
-    printRequest(requestDate());
-    String date = input.inputDate();
-    printRequest(requestPrice());
-    double price = input.inputDouble(10_000);
+    String typeName = stringInput(2, requestGroceryType());
+    String unit = stringInput(1, requestUnit());
+    double quantity = doubleInput(0,10_000, requestQuantity());
+    LocalDate date = dateInput(requestDate());
+    double price = doubleInput(0, 10_000, requestPrice());
+
+    foodStorage.addToGroceries(typeName, unit, quantity, date, price);
   }
 
   private void removeGrocery() {
@@ -146,7 +145,7 @@ public class UserInterfaceFlow {
     while (askAgain) {
       printMenu(menu);
       try {
-        userInput = input.inputNumber(max);
+        userInput = input.inputByte(max);
         if (!isValidByte(max, userInput)) {
           throw new IllegalArgumentException();
         }
@@ -157,6 +156,54 @@ public class UserInterfaceFlow {
       }
       catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
+      }
+    }
+    return userInput;
+  }
+
+  private double doubleInput(double min, double max, String menu) {
+    double userInput = 0;
+
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        userInput = input.inputDouble(max);
+        if (!isValidDouble(min, max, userInput)) {
+          throw new IllegalArgumentException();
+        }
+        askAgain = false;
+      }
+      catch (IllegalArgumentException e) {
+        printUserInputError("Number not in valid range [" + min + "-" + max + "]");
+      }
+      catch (InputMismatchException e) {
+        printUserInputError("Not a valid number");
+      }
+    }
+    return userInput;
+  }
+
+  private String stringInput(int minLength, String menu) {
+    printMenu(menu);
+    return input.inputString(minLength);
+  }
+
+  private LocalDate dateInput(String menu) {
+    LocalDate userInput = LocalDate.now();
+
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        userInput = input.inputDate();
+        askAgain = false;
+      }
+      catch (IllegalArgumentException e) {
+        printUserInputError("Date is not written in correct format. Correct way: dd.MM.yyyy.");
+      }
+      catch (InputMismatchException e) {
+        printUserInputError("Not parsed at all. Correct way: dd.MM.yyyy");
       }
     }
     return userInput;
