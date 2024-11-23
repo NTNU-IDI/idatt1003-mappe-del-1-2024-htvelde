@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

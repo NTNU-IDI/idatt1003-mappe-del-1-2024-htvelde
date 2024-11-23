@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Classes.FoodStorage;
+package edu.ntnu.idi.idatt.classes.foodStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -146,5 +146,9 @@ public class Groceries {
         tempDate = (LocalDate) g.getExpiryDate();
       }
     }
+  }
+
+  public String getGroceryUnit() {
+    return groceryUnit;
   }
 }

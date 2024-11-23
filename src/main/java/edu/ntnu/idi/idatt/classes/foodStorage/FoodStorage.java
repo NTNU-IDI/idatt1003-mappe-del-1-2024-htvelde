@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Classes.FoodStorage;
+package edu.ntnu.idi.idatt.classes.foodStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class FoodStorage {
    */
   public int searchGroceries(String groceryName) {
     Optional<Groceries> searchResult = storage.stream()
-        .filter(grocery -> grocery.getGroceryName().equals(groceryName))
+        .filter(grocery -> grocery.getGroceryName().equalsIgnoreCase(groceryName))
         .findFirst();
 
     if (searchResult.isPresent()) {
@@ -61,5 +61,13 @@ public class FoodStorage {
       return storage.indexOf(searchResult.get());
     }
     return -1;
+  }
+
+  public String getUnit(int groceryIndex) {
+    return storage.get(groceryIndex).getGroceryUnit();
+  }
+
+  public String getUnit(String groceryName) {
+    return storage.get(searchGroceries(groceryName)).getGroceryUnit();
   }
 }

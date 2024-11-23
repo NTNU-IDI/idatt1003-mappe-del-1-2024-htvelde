@@ -1,11 +1,11 @@
-package edu.ntnu.idi.idatt.UI;
+package edu.ntnu.idi.idatt.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static edu.ntnu.idi.idatt.Utils.Date.stringToDate;
+import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
 
 public class UserInput {
   private final Scanner scanner = new Scanner(System.in);

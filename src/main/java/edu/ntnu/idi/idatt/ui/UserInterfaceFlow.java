@@ -1,15 +1,16 @@
-package edu.ntnu.idi.idatt.UI;
+package edu.ntnu.idi.idatt.ui;
 
-import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
-import edu.ntnu.idi.idatt.Classes.FoodStorage.Grocery;
+import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.classes.foodStorage.Grocery;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 
-import static edu.ntnu.idi.idatt.UI.UserInterfacePrintOut.*;
-import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.requestPrice;
-import static edu.ntnu.idi.idatt.UI.ValidateInput.*;
-import static edu.ntnu.idi.idatt.UI.UserInterfaceTextSource.*;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPrice;
+
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.*;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.*;
+import static edu.ntnu.idi.idatt.ui.ValidateInput.*;
 
 /**
  * All commands and instructions are handled within this class.
@@ -46,6 +47,9 @@ public class UserInterfaceFlow {
       case 3 -> removeGrocery();
       case 4 -> searchGrocery();
       case 5 -> recipesMenu();
+      default -> {
+        break;
+      }
     }
   }
 
@@ -117,8 +121,11 @@ public class UserInterfaceFlow {
 
   private void addGrocery() {
     String typeName = stringInput(2, requestGroceryType());
-    String unit = stringInput(1, requestUnit());
-    double quantity = doubleInput(0,10_000, requestQuantity());
+    String unit =
+        (foodStorage.searchGroceries(typeName) == -1)
+        ? stringInput(1, requestUnit())
+        : foodStorage.getUnit(typeName);
+    double quantity = doubleInput(0, 10_000, requestQuantity());
     LocalDate date = dateInput(requestDate());
     double price = doubleInput(0, 10_000, requestPrice());
 
@@ -150,11 +157,9 @@ public class UserInterfaceFlow {
           throw new IllegalArgumentException();
         }
         askAgain = false;
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         printUserInputError("Number not in valid range [1-" + max + "]");
-      }
-      catch (InputMismatchException e) {
+      } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
       }
     }
@@ -173,11 +178,9 @@ public class UserInterfaceFlow {
           throw new IllegalArgumentException();
         }
         askAgain = false;
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         printUserInputError("Number not in valid range [" + min + "-" + max + "]");
-      }
-      catch (InputMismatchException e) {
+      } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
       }
     }
@@ -198,11 +201,9 @@ public class UserInterfaceFlow {
       try {
         userInput = input.inputDate();
         askAgain = false;
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         printUserInputError("Date is not written in correct format. Correct way: dd.MM.yyyy.");
-      }
-      catch (InputMismatchException e) {
+      } catch (InputMismatchException e) {
         printUserInputError("Not parsed at all. Correct way: dd.MM.yyyy");
       }
     }

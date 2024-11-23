@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Classes.FoodStorage;
+package edu.ntnu.idi.idatt.classes.foodStorage;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;

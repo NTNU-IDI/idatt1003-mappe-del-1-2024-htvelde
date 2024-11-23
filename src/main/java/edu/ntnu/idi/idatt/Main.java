@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.UI.UserInterfaceFlow;
+import edu.ntnu.idi.idatt.ui.UserInterfaceFlow;
 
 /**
  * This is the client-program from where everything is run.

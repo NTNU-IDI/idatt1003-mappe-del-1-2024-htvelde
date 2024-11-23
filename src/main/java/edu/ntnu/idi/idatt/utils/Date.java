@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Utils;
+package edu.ntnu.idi.idatt.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

@@ -1,6 +1,6 @@
-package edu.ntnu.idi.idatt.UI;
+package edu.ntnu.idi.idatt.ui;
 
-import edu.ntnu.idi.idatt.Classes.FoodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
 
 public class UserInterfaceTextSource {
   private static final String RESET_COLOR = "\u001B[0m";
