@@ -1,7 +1,11 @@
 package edu.ntnu.idi.idatt.UI;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import static edu.ntnu.idi.idatt.Utils.Date.stringToDate;
 
 public class UserInput {
   private final Scanner scanner = new Scanner(System.in);
@@ -43,13 +47,13 @@ public class UserInput {
     return number;
   }
 
-  public String inputString() throws IllegalArgumentException, InputMismatchException {
+  public String inputString(int minLength) throws IllegalArgumentException, InputMismatchException {
     String string = "";
 
     try {
-      string = scanner.nextLine();
-      if (string.length() < 2) {
-        System.out.println("Length" + string.length());
+      string = scanner.next();
+      if (string.length() < minLength) {
+        System.err.println("Length" + string.length());
         throw new IllegalArgumentException("Too short input. It must be at least 2 characters.");
       }
     }
@@ -64,16 +68,18 @@ public class UserInput {
     return string;
   }
 
-  public String inputDate() throws IllegalArgumentException, InputMismatchException {
+  public LocalDate inputDate() throws IllegalArgumentException, InputMismatchException {
     String string = "";
+    LocalDate localDate = null;
 
     try {
-      string = scanner.nextLine();
+      string = scanner.next();
       // Regex I made on my own after an introduction to logical Regex.
       if (!string.matches("([012][1-9]|3[01])\\.(0[1-9]|1[0-2])\\.[0-9]{4}")) {
-        System.out.println("Does not conform the dd.MM.yyyy format.");
+        System.err.println("Does not conform the dd.MM.yyyy format.");
         throw new IllegalArgumentException("Does not conform the dd.MM.yyyy format.");
       }
+      localDate = stringToDate(string);
     }
     catch (IllegalArgumentException e) {
       scanner.next();
@@ -83,6 +89,9 @@ public class UserInput {
       scanner.next();
       throw new InputMismatchException("Please enter a valid string.");
     }
-    return string;
+    catch (DateTimeParseException e) {
+      System.err.println("Something has gone very wrong in parsing of date!");
+    }
+    return localDate;
   }
 }
