@@ -48,20 +48,16 @@ public class UserInput {
   }
 
   public String inputString(int minLength) throws IllegalArgumentException, InputMismatchException {
-    String string = "";
+    String string;
 
     try {
       string = scanner.next();
       if (string.length() < minLength) {
-        System.err.println("Length" + string.length());
         throw new IllegalArgumentException("Too short input. It must be at least 2 characters.");
       }
-    }
-    catch (IllegalArgumentException e) {
-      scanner.next();
+    } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Please enter a string with more than 2 characters.");
-    }
-    catch (InputMismatchException e) {
+    } catch (InputMismatchException e) {
       scanner.next();
       throw new InputMismatchException("Please enter a valid string.");
     }
@@ -82,7 +78,6 @@ public class UserInput {
       localDate = stringToDate(string);
     }
     catch (IllegalArgumentException e) {
-      scanner.next();
       throw new IllegalArgumentException("Please enter a date on the format dd.MM.yyyy.");
     }
     catch (InputMismatchException e) {

@@ -56,11 +56,7 @@ public class FoodStorage {
         .filter(grocery -> grocery.getGroceryName().equalsIgnoreCase(groceryName))
         .findFirst();
 
-    if (searchResult.isPresent()) {
-      System.err.println("Search result: " + searchResult.get());
-      return storage.indexOf(searchResult.get());
-    }
-    return -1;
+    return searchResult.map(groceries -> storage.indexOf(groceries)).orElse(-1);
   }
 
   public String getUnit(int groceryIndex) {

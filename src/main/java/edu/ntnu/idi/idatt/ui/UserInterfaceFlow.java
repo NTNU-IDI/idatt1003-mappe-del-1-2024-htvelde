@@ -188,7 +188,17 @@ public class UserInterfaceFlow {
   }
 
   private String stringInput(int minLength, String menu) {
-    printMenu(menu);
+    String stringOut;
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        stringOut = input.inputString(minLength);
+        askAgain = false;
+      } catch (IllegalArgumentException e) {
+        printUserInputError(e.getMessage());
+      }
+    }
     return input.inputString(minLength);
   }
 
@@ -202,7 +212,8 @@ public class UserInterfaceFlow {
         userInput = input.inputDate();
         askAgain = false;
       } catch (IllegalArgumentException e) {
-        printUserInputError("Date is not written in correct format. Correct way: dd.MM.yyyy.");
+        // printUserInputError("Date is not written in correct format. Correct way: dd.MM.yyyy.");
+        printUserInputError(e.getMessage());
       } catch (InputMismatchException e) {
         printUserInputError("Not parsed at all. Correct way: dd.MM.yyyy");
       }
