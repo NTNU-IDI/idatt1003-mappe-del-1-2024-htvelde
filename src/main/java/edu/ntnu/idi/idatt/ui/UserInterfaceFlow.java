@@ -188,7 +188,7 @@ public class UserInterfaceFlow {
   }
 
   private String stringInput(int minLength, String menu) {
-    String stringOut;
+    String stringOut = "";
     boolean askAgain = true;
     while (askAgain) {
       printMenu(menu);
@@ -199,7 +199,7 @@ public class UserInterfaceFlow {
         printUserInputError(e.getMessage());
       }
     }
-    return input.inputString(minLength);
+    return stringOut;
   }
 
   private LocalDate dateInput(String menu) {
