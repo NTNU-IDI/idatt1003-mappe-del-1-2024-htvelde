@@ -17,6 +17,7 @@ public class Grocery {
   what kind of grocery, the unit of measurement and expiry date.
   */
   private final String groceryType;
+  private final String unit;
   private final double quantity;
   private final LocalDate expiryDate;
   private final double price;
@@ -33,17 +34,16 @@ public class Grocery {
    * @param expirationDate - When the food turns bad
    * @param price - How much this batch costed
    */
-  public Grocery(String groceryType, double quantity, LocalDate expirationDate, double price) {
+  public Grocery(String groceryType, String unit, double quantity, LocalDate expirationDate, double price) {
     this.groceryType = groceryType;
+    this.unit = unit;
     this.quantity = quantity;
     this.expiryDate = expirationDate;
     this.price = price;
   }
 
-  // TODO: create a nice toString(), and rename to something else
-  @Override
-  public String toString() {
-    return this.groceryType;
+  public String info() {
+    return this.groceryType + " " + this.quantity + this.unit + " " + this.expiryDate + " " + this.price + " kr";
   }
 
   public double getQuantity() {

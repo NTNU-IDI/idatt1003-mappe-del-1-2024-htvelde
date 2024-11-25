@@ -41,7 +41,7 @@ public class FoodStorage {
     if (index == -1) {
       storage.add(new Groceries(groceryType, unit, quantity, date, price));
     } else {
-      storage.get(index).addGrocery(groceryType, quantity, date, price);
+      storage.get(index).addGrocery(groceryType, unit, quantity, date, price);
     }
   }
 

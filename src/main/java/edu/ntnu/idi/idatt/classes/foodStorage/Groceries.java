@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * That includes keeping track on the oldest items in inventory.
  */
 public class Groceries {
-  private ArrayList<Grocery> groceries;
+  private final ArrayList<Grocery> groceries;
   private final String groceryName;
   private final String groceryUnit;
   private LocalDate groceryOldestDate;
@@ -31,7 +31,7 @@ public class Groceries {
     this.groceryName = groceryName;
     this.groceryUnit = groceryUnit;
     this.groceryOldestDate = expirationDate;
-    this.addGrocery(groceryName, quantity, expirationDate, groceryPrice);
+    this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
 
   // TODO: rename to something else
@@ -90,10 +90,11 @@ public class Groceries {
    */
   public void addGrocery(
       String groceryType,
+      String unit,
       double quantity,
       LocalDate expiryDate,
       double price) {
-    groceries.add(new Grocery(groceryType, quantity, expiryDate, price));
+    groceries.add(new Grocery(groceryType, unit, quantity, expiryDate, price));
     this.oldestDate();
   }
 

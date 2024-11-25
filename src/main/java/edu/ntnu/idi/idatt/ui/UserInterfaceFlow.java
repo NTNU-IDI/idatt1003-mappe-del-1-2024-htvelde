@@ -85,10 +85,9 @@ public class UserInterfaceFlow {
     }
 
     for (Grocery grocery : foodStorage.getStorage().get(searchResult).getGroceries()) {
-      System.out.println(grocery.toString());
+      print(grocery.info());
     }
 
-    System.out.println(searchOptions);
   }
 
   /**
