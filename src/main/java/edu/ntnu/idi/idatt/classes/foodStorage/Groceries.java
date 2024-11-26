@@ -34,9 +34,7 @@ public class Groceries {
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
 
-  // TODO: rename to something else
-  @Override
-  public String toString() {
+  public String info() {
     // Made partially by AI-prompt in ChatGPT.
     // The take-away from the prompt was how to use substring and how to pad text.
     String name;
