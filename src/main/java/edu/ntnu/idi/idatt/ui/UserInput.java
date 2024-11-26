@@ -53,10 +53,14 @@ public class UserInput {
     try {
       string = scanner.next();
       if (string.length() < minLength) {
-        throw new IllegalArgumentException("Too short input. It must be at least 2 characters.");
+        throw new IllegalArgumentException(
+            "Too short input. It must be at least " + minLength + " characters."
+        );
       }
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Please enter a string with more than 2 characters.");
+      throw new IllegalArgumentException(
+          "Please enter a string with more than " + minLength + " characters."
+      );
     } catch (InputMismatchException e) {
       scanner.next();
       throw new InputMismatchException("Please enter a valid string.");
