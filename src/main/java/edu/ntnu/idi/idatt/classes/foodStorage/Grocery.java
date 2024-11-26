@@ -43,7 +43,7 @@ public class Grocery {
   }
 
   public String info() {
-    return this.groceryType + " " + this.quantity + this.unit + " " + this.expiryDate + " " + this.price + " kr";
+    return this.groceryType + " " + this.quantity + " " + this.unit + " " + this.expiryDate + " " + this.price + " kr";
   }
 
   public double getQuantity() {
