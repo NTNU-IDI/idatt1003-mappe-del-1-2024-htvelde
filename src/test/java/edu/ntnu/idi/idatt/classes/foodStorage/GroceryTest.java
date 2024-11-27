@@ -26,7 +26,7 @@ class GroceryTest {
 
   @Test
    void info() {
-    assertSame("Normal 10.5 kg 2020-01-01 21.4 kr", grocery.info());
+    assertEquals("Normal 10.5 kg 2020-01-01 21.4 kr", grocery.info());
   }
 
   @Test
