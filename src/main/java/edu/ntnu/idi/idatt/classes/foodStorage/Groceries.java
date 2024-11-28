@@ -92,6 +92,9 @@ public class Groceries {
       double quantity,
       LocalDate expiryDate,
       double price) {
+    if (!groceryType.equals(groceryName)) {
+      throw new IllegalArgumentException("New type of grocery should not be added to Groceries.");
+    }
     groceries.add(new Grocery(groceryType, unit, quantity, expiryDate, price));
     this.oldestDate();
   }

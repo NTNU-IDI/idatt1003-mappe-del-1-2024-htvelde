@@ -16,19 +16,17 @@ class GroceriesTest {
   }
 
   @Test
-  void addingExistingGroceryShouldKeepSizeEqual() {
-    int before = groceries.getGroceries().size();
-    groceries.addGrocery("Milk", "L", 1, LocalDate.now(), 21.5);
-    int after = groceries.getGroceries().size();
-    assertEquals(0, after - before);
+  void addGroceryIncrements() {
+    int count_before = groceries.getGroceries().size();
+    groceries.addGrocery("Milk", "L", 10, LocalDate.now(), 20.5);
+    int count_after = groceries.getGroceries().size();
+    assertEquals(count_before+1, count_after);
   }
 
   @Test
-  void addingNewGroceryIncrementsSize() {
-    int before = groceries.getGroceries().size();
-    groceries.addGrocery("Juice", "L", 1, LocalDate.now(), 26.5);
-    int after = groceries.getGroceries().size();
-    assertEquals(1, after - before);
+  void addingNonExistingGroceriesThrowsException() {
+    assertThrows(IllegalArgumentException.class, () ->
+        groceries.addGrocery("Juice", "L", 1, LocalDate.now(), 21.5));
   }
 
   @Test
