@@ -7,19 +7,29 @@ import java.util.Scanner;
 
 import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
 
+
+/**
+ * <h1>UserInput</h1>
+ * UserInput uses Scanner and functions to get input from the user.<br>
+ * It is also the only class to use Scanner in this project,
+ * meaning all user input related code must be written here or in the ValidateInput class.
+ *
+ * @see ValidateInput
+ * @see Scanner
+ */
 public class UserInput {
   private final Scanner scanner = new Scanner(System.in);
 
   /**
-   * This class asks for the user input.
+   * <h1>inputByte</h1>
+   * This method asks for the user to input a byte to be handled as a choice.<br>
    * It returns a byte instead of int as it should be sufficient
    * with 128 options for the user (negatives are not accepted).
    *
-   * @param max Defines the upper limit of choices.
    * @return Returns the byte as the action of the user.
    * @throws IllegalArgumentException Raises exception if invalid input.
    */
-  public byte inputByte(byte max) throws IllegalArgumentException, InputMismatchException {
+  public byte inputByte() throws IllegalArgumentException, InputMismatchException {
     byte number = 0;
 
     try {
@@ -33,7 +43,15 @@ public class UserInput {
     return number;
   }
 
-  public double inputDouble(double max) throws IllegalArgumentException, InputMismatchException {
+  /**
+   * <h1>inputDouble</h1>
+   * This method asks for the user to input a float.<br>
+   * If something besides a float is provided, it throws an exception.
+   *
+   * @return Returns the float input from the user.
+   * @throws InputMismatchException when user input is not a float.
+   */
+  public double inputDouble() throws InputMismatchException {
     double number = 0;
 
     try {
@@ -47,6 +65,15 @@ public class UserInput {
     return number;
   }
 
+  /**
+   * This asks for a string input from the user.
+   * The method expects a string ended with a linebreak to enter.
+   *
+   * @param minLength The minimum length of a name to avoid ambiguous naming.
+   * @return String returned is the inputted string before the linebreak.
+   * @throws IllegalArgumentException Throws an exception if string is not long enough.
+   * @throws InputMismatchException Throws exception when user input is not handled.
+   */
   public String inputString(int minLength) throws IllegalArgumentException, InputMismatchException {
     String string;
 
@@ -68,13 +95,24 @@ public class UserInput {
     return string;
   }
 
-  public LocalDate inputDate() throws IllegalArgumentException, InputMismatchException {
+  /**
+   * Asks the user for date, which they have to write in dd.mm.yyyy-format.
+   * Throws error if the inputted date is not parsed.
+   *
+   * @return LocalDate of the user input is returned.
+   * @throws IllegalArgumentException is thrown if the date is not in correct format.
+   * @throws InputMismatchException is a special case of input-error that may be redundant.
+   * @throws DateTimeParseException throws when date passes check, but still is not real.
+   */
+  public LocalDate inputDate() throws IllegalArgumentException, InputMismatchException, DateTimeParseException {
     String string = "";
     LocalDate localDate = null;
 
     try {
       string = scanner.next();
       // Regex I made on my own after an introduction to logical Regex.
+      // It does not know how long any months are
+      // An easy solution would be to have four checks dependent on month, then have the correct maximum of days.
       if (!string.matches("(0[1-9]|[12][0-9]|3[01])\\.(0" +
           "[1-9]|1[0-2])\\.[0-9]{4}")) {
         throw new IllegalArgumentException("Does not conform the dd.MM.yyyy format.");

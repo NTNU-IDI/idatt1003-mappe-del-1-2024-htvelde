@@ -4,6 +4,7 @@ import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
 import edu.ntnu.idi.idatt.classes.foodStorage.Grocery;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPrice;
@@ -32,14 +33,21 @@ public class UserInterfaceFlow {
   public void start() {
     boolean running = true;
     while (running) {
-      mainMenu();
-      // running = false;
+      running = mainMenu();
     }
   }
 
-  public void mainMenu() {
+
+  /**
+   * The mainMenu dictates the flow of the program with user input.
+   * It is meant to repeat until user wants to exit, which is indicated with a boolean.
+   *
+   * @return returns a boolean to indicate whether the function should repeat or not.
+   */
+  public boolean mainMenu() {
     byte max = 6;
     byte userInput = byteInput(max, mainMenuText());
+    boolean repeat = true;
 
     switch (userInput) {
       case 1 -> groceriesMenu();
@@ -48,9 +56,12 @@ public class UserInterfaceFlow {
       case 4 -> searchGrocery();
       case 5 -> recipesMenu();
       default -> {
+        repeat = false;
         break;
       }
     }
+
+    return repeat;
   }
 
   /**
@@ -65,7 +76,9 @@ public class UserInterfaceFlow {
       case 2 -> removeGrocery();
       case 3 -> searchGrocery();
       case 4 -> expiredGroceries();
-      default -> mainMenu();
+      default -> {
+        return;
+      }
     }
   }
 
@@ -78,6 +91,10 @@ public class UserInterfaceFlow {
 
     print(searchOptions);
     String searchString = input.inputString(2);
+
+    if (searchString.equalsIgnoreCase("exit")) {
+      return;
+    }
 
     int searchResult = foodStorage.searchGroceries(searchString.toLowerCase());
     if (searchResult == -1) {
@@ -102,7 +119,9 @@ public class UserInterfaceFlow {
       case 2 -> removeRecipe();
       case 3 -> searchRecipe();
       case 4 -> suggestedRecipe();
-      default -> mainMenu();
+      default -> {
+        return;
+      }
     }
   }
 
@@ -119,14 +138,17 @@ public class UserInterfaceFlow {
   }
 
   private void addGrocery() {
-    String typeName = stringInput(2, requestGroceryType());
+    ArrayList<String> restrictions = new ArrayList<String>();
+    restrictions.add("exit");
+
+    String typeName = stringInput(2, requestGroceryType(), restrictions);
     String unit =
         (foodStorage.searchGroceries(typeName) == -1)
         ? stringInput(1, requestUnit())
         : foodStorage.getUnit(typeName);
     double quantity = doubleInput(0, 10_000, requestQuantity());
-    LocalDate date = dateInput(requestDate());
     double price = doubleInput(0, 10_000, requestPrice());
+    LocalDate date = dateInput(requestDate());
 
     foodStorage.addToGroceries(typeName, unit, quantity, date, price);
   }
@@ -199,6 +221,31 @@ public class UserInterfaceFlow {
       }
     }
     return stringOut;
+  }
+
+  private String stringInput(int minLength, String menu, ArrayList<String> restrictions) {
+    String stringOut = "";
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        stringOut = input.inputString(minLength);
+        if (!isRestricted(stringOut, restrictions)) {
+          // I have used an exception to print what the user did wrong.
+          // If I had more time I would make a standard solution.
+          throw new IllegalArgumentException("Restricted input.");
+        }
+        askAgain = false;
+      } catch (IllegalArgumentException e) {
+        printUserInputError(e.getMessage());
+      }
+    }
+    return stringOut;
+  }
+  
+  private boolean isRestricted(String input, ArrayList<String> restrictions) {
+    return restrictions.stream()
+        .noneMatch(str -> str.equalsIgnoreCase(input));
   }
 
   private LocalDate dateInput(String menu) {
