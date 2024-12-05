@@ -151,6 +151,11 @@ public class UserInterfaceFlow {
   }
 
   private void removeGrocery() {
+    print(removeGroceryInformation());
+    String typeName = stringInput(2, requestGroceryType());
+    double quantity = doubleInput(0, 1_000_000, requestQuantity());
+
+    foodStorage.getStorage().get(foodStorage.searchGroceries(typeName)).removeGrocery(quantity);
     System.out.println("Removed groceries");
   }
 
