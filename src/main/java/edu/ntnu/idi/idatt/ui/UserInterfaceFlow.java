@@ -55,10 +55,7 @@ public class UserInterfaceFlow {
       case 3 -> removeGrocery();
       case 4 -> searchGrocery();
       case 5 -> recipesMenu();
-      default -> {
-        repeat = false;
-        break;
-      }
+      default -> repeat = false;
     }
 
     return repeat;
@@ -146,8 +143,8 @@ public class UserInterfaceFlow {
         (foodStorage.searchGroceries(typeName) == -1)
         ? stringInput(1, requestUnit())
         : foodStorage.getUnit(typeName);
-    double quantity = doubleInput(0, 10_000, requestQuantity());
-    double price = doubleInput(0, 10_000, requestPrice());
+    double quantity = doubleInput(0, 1_000_000, requestQuantity());
+    double price = doubleInput(0, 1_000_000, requestPrice());
     LocalDate date = dateInput(requestDate());
 
     foodStorage.addToGroceries(typeName, unit, quantity, date, price);
@@ -173,7 +170,7 @@ public class UserInterfaceFlow {
     while (askAgain) {
       printMenu(menu);
       try {
-        userInput = input.inputByte(max);
+        userInput = input.inputByte();
         if (!isValidByte(max, userInput)) {
           throw new IllegalArgumentException();
         }
@@ -194,7 +191,7 @@ public class UserInterfaceFlow {
     while (askAgain) {
       printMenu(menu);
       try {
-        userInput = input.inputDouble(max);
+        userInput = input.inputDouble();
         if (!isValidDouble(min, max, userInput)) {
           throw new IllegalArgumentException();
         }
