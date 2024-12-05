@@ -1,5 +1,9 @@
 package edu.ntnu.idi.idatt.ui;
 
+import edu.ntnu.idi.idatt.classes.foodStorage.Groceries;
+
+import java.util.ArrayList;
+
 public class UserInterfacePrintOut {
   public static void print(String string) {
     System.out.println(string);
@@ -39,5 +43,9 @@ public class UserInterfacePrintOut {
 
   public static void printRequestSearchName(String requestSearchName) {
     System.out.println(requestSearchName);
+  }
+
+  public static void printArrayList(ArrayList<Groceries> arrayList) {
+    arrayList.forEach(m -> print(m.info()));
   }
 }

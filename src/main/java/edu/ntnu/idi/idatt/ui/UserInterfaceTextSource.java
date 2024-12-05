@@ -46,7 +46,8 @@ public class UserInterfaceTextSource {
       [2] Remove grocery from food storage
       [3] Search for a grocery from food storage
       [4] View expired groceries from food storage
-      [5] Exit to main menu\r
+      [5] View all stored groceries
+      [6] Exit to main menu\r
       """;
   }
 

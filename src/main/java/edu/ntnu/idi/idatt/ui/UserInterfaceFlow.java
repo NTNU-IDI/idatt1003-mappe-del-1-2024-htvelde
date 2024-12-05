@@ -65,7 +65,7 @@ public class UserInterfaceFlow {
    * Creates a menu for the actions for groceries.
    */
   public void groceriesMenu() {
-    byte max = 5;
+    byte max = 6;
     byte userInput = byteInput(max, groceriesMenuText());
 
     switch (userInput) {
@@ -73,6 +73,7 @@ public class UserInterfaceFlow {
       case 2 -> removeGrocery();
       case 3 -> searchGrocery();
       case 4 -> expiredGroceries();
+      case 5 -> showAllGroceries();
       default -> {
         return;
       }
@@ -267,5 +268,9 @@ public class UserInterfaceFlow {
       }
     }
     return userInput;
+  }
+
+  private void showAllGroceries() {
+    printArrayList(foodStorage.getStorage());
   }
 }
