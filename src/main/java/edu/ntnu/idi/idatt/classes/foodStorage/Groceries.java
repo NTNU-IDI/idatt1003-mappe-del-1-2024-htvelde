@@ -2,6 +2,9 @@ package edu.ntnu.idi.idatt.classes.foodStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Here is the implementation of each kind of groceries.
@@ -92,11 +95,42 @@ public class Groceries {
       double quantity,
       LocalDate expiryDate,
       double price) {
-    if (!groceryType.equals(groceryName)) {
+    if (!groceryType.equalsIgnoreCase(groceryName)) {
       throw new IllegalArgumentException("New type of grocery should not be added to Groceries.");
     }
     groceries.add(new Grocery(groceryType, unit, quantity, expiryDate, price));
     this.oldestDate();
+  }
+
+  public void removeGrocery(double quantity) {
+    if (quantity >= totalQuantity()) {
+      groceries.removeAll(groceries);
+      return;
+    }
+
+    double quantityRemaining = quantity;
+    for (Grocery g : groceries) {
+      System.err.println(g.info());
+      if (quantityRemaining >= g.getQuantity()) {
+        System.err.println("Should remove item start");
+
+        quantityRemaining -= g.getQuantity();
+        groceries.remove(g);
+
+        System.err.println("Should remove item stop");
+      } else {
+        System.err.println("Else start");
+
+        g.removeQuantity(quantityRemaining);
+        quantityRemaining = 0;
+
+        System.err.println("Else stop");
+      }
+    }
+  }
+
+  public void sortGrocery() {
+    groceries.sort(Comparator.comparing(Grocery::getExpiryDate));
   }
 
   public String getGroceryName() {

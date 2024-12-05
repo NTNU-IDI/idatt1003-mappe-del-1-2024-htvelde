@@ -18,9 +18,9 @@ public class Grocery {
   */
   private final String groceryType;
   private final String unit;
-  private final double quantity;
   private final LocalDate expiryDate;
   private final double price;
+  private double quantity;
 
   /**
    * Constructor for the Grocery-class.
@@ -56,5 +56,13 @@ public class Grocery {
 
   public double getPrice() {
     return price;
+  }
+
+  public void setQuantity(double quantity) {
+    this.quantity = quantity;
+  }
+
+  public void removeQuantity(double quantity) {
+    this.quantity -= quantity;
   }
 }
