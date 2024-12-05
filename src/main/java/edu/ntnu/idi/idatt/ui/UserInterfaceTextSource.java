@@ -113,4 +113,10 @@ public class UserInterfaceTextSource {
     String name = CYAN + "NAME" + RESET_COLOR;
     return "Enter the " + name + " of the product you search for";
   }
+
+  public static String removeGroceryInformation() {
+    String name = CYAN + "NAME" + RESET_COLOR;
+    String quantity = CYAN + "QUANTITY" + RESET_COLOR;
+    return "Enter the " + name + " and then " + quantity + " of the product you wish to remove";
+  }
 }
