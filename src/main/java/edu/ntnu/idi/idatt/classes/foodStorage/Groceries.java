@@ -190,10 +190,10 @@ public class Groceries {
   public boolean isEmpty() {
     sortGrocery();
     for (Grocery g : groceries) {
-      if (g.getQuantity() <= 0) {
-        return true;
+      if (g.getQuantity() > 0) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 }
