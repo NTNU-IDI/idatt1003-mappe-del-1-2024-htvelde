@@ -160,6 +160,7 @@ public class UserInterfaceFlow {
     System.out.println("Removed groceries");
   }
 
+  //TODO: Fix that thing
   private void expiredGroceries() {
     System.out.println("Expired groceries");
     System.out.println(valueOfExpiredGroceries());
@@ -271,6 +272,7 @@ public class UserInterfaceFlow {
   }
 
   private void showAllGroceries() {
+    print(allGroceriesString());
     printArrayList(foodStorage.getStorage());
   }
 }

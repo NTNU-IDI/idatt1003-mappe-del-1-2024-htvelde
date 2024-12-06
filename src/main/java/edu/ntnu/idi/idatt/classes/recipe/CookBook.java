@@ -1,4 +1,4 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
-public class Recipes {
+public class CookBook {
 }
