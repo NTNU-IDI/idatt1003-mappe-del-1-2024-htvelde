@@ -19,7 +19,7 @@ public class Grocery {
   private final String groceryType;
   private final String unit;
   private final LocalDate expiryDate;
-  private final double price;
+  private double price;
   private double quantity;
 
   /**
@@ -58,11 +58,16 @@ public class Grocery {
     return price;
   }
 
-  public void setQuantity(double quantity) {
-    this.quantity = quantity;
+  public void removeQuantity(double quantity) {
+    updatePrice(quantity);
+    this.quantity -= quantity;
   }
 
-  public void removeQuantity(double quantity) {
-    this.quantity -= quantity;
+  private void updatePrice(double quantityRemoved) {
+    if (quantityRemoved > 0) {
+      double percentageRemoved = quantityRemoved / quantity;
+      System.err.println(percentageRemoved);
+      this.price = this.price * percentageRemoved;
+    }
   }
 }
