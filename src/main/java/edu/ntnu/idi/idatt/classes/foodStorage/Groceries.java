@@ -14,6 +14,7 @@ public class Groceries {
   private final ArrayList<Grocery> groceries;
   private final String groceryName;
   private final String groceryUnit;
+  private double totalQuantity = 0;
   private LocalDate groceryOldestDate;
 
   /**
@@ -34,6 +35,7 @@ public class Groceries {
     this.groceryName = groceryName;
     this.groceryUnit = groceryUnit;
     this.groceryOldestDate = expirationDate;
+    this.totalQuantity += quantity;
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
 
@@ -112,19 +114,12 @@ public class Groceries {
     for (Grocery g : groceries) {
       System.err.println(g.info());
       if (quantityRemaining >= g.getQuantity()) {
-        System.err.println("Should remove item start");
 
         quantityRemaining -= g.getQuantity();
         groceries.remove(g);
-
-        System.err.println("Should remove item stop");
       } else {
-        System.err.println("Else start");
-
         g.removeQuantity(quantityRemaining);
         quantityRemaining = 0;
-
-        System.err.println("Else stop");
       }
     }
   }
@@ -145,7 +140,6 @@ public class Groceries {
   public double totalQuantity() {
     double tempQuantity = 0;
     if (groceries.isEmpty()) {
-      System.out.println("There is nothing to show. You have an empty food storage.");
       return 0;
     }
     for (Grocery g : groceries) {
@@ -162,7 +156,6 @@ public class Groceries {
   public double totalPrice() {
     double tempPrice = 0;
     if (groceries.isEmpty()) {
-      System.out.println("There is nothing to show from this grocery.");
       return 0;
     }
     for (Grocery g : groceries) {
@@ -174,17 +167,33 @@ public class Groceries {
   /**
    * Searches for the first item that will expire, and mutates field-value thereafter.
    */
-  private void oldestDate() {
+  public void oldestDate() {
+    sortGrocery();
     // Checks for the lowest date-value in the ArrayList
     LocalDate tempDate = LocalDate.MAX;
     for (Grocery g : groceries) {
-      if (tempDate.compareTo(g.getExpiryDate()) > 0) {
+      if (tempDate.isAfter(g.getExpiryDate())) {
         tempDate = (LocalDate) g.getExpiryDate();
       }
     }
+    this.groceryOldestDate = tempDate;
+  }
+
+  public boolean hasExpired() {
+    return groceryOldestDate.isBefore(LocalDate.now());
   }
 
   public String getGroceryUnit() {
     return groceryUnit;
+  }
+
+  public boolean isEmpty() {
+    sortGrocery();
+    for (Grocery g : groceries) {
+      if (g.getQuantity() <= 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

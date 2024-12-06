@@ -48,4 +48,8 @@ public class UserInterfacePrintOut {
   public static void printArrayList(ArrayList<Groceries> arrayList) {
     arrayList.forEach(m -> print(m.info()));
   }
+
+  public static void newLine() {
+    System.out.println();
+  }
 }

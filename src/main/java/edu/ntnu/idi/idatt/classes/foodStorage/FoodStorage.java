@@ -17,10 +17,27 @@ public class FoodStorage {
    */
   public FoodStorage() {
     addToGroceries("Milk", "L", 1, LocalDate.now(), 21.5);
+    addToGroceries("Milk", "L", 1, LocalDate.now().minusDays(1), 21.5);
+    addToGroceries("Flour", "kg", 4, LocalDate.now().plusYears(2), 24.2);
+    addToGroceries("Juice", "L", 2.5, LocalDate.now().plusDays(5), 29.5);
+    addToGroceries("Sugar", "kg", 0.5, LocalDate.now().plusYears(1), 6.5);
+    addToGroceries("Egg", "ea", 12, LocalDate.now().minusDays(5), 41.5);
   }
 
   public ArrayList<Groceries> getStorage() {
+    update();
     return storage;
+  }
+
+  public ArrayList<Groceries> getExpired() {
+    update();
+    ArrayList<Groceries> expired = new ArrayList<Groceries>();
+    for (Groceries g : storage) {
+      if (g.hasExpired()) {
+        expired.add(g);
+      }
+    }
+    return expired;
   }
 
   /**
@@ -52,6 +69,7 @@ public class FoodStorage {
    * @return : Returns the first (and only) index of the sought after grocery.
    */
   public int searchGroceries(String groceryName) {
+    update();
     Optional<Groceries> searchResult = storage.stream()
         .filter(grocery -> grocery.getGroceryName().equalsIgnoreCase(groceryName))
         .findFirst();
@@ -65,5 +83,20 @@ public class FoodStorage {
 
   public String getUnit(String groceryName) {
     return storage.get(searchGroceries(groceryName)).getGroceryUnit();
+  }
+
+  private void update() {
+    removeEmptyGroceries();
+    updateDate();
+  }
+
+  private void removeEmptyGroceries() {
+    storage.removeIf(Groceries::isEmpty);
+  }
+
+  private void updateDate() {
+    for (Groceries g : storage) {
+      g.oldestDate();
+    }
   }
 }

@@ -5,6 +5,7 @@ import edu.ntnu.idi.idatt.classes.foodStorage.Grocery;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPrice;
@@ -158,12 +159,23 @@ public class UserInterfaceFlow {
 
     foodStorage.getStorage().get(foodStorage.searchGroceries(typeName)).removeGrocery(quantity);
     System.out.println("Removed groceries");
+    newLine();
+  }
+
+  private void showAllGroceries() {
+    print(allGroceriesString());
+    printArrayList(foodStorage.getStorage());
+    newLine();
   }
 
   //TODO: Fix that thing
   private void expiredGroceries() {
-    System.out.println("Expired groceries");
-    System.out.println(valueOfExpiredGroceries());
+    print(RED);
+    print(expired());
+    print(allGroceriesString());
+    printArrayList(foodStorage.getExpired());
+    print(RESET_COLOR);
+    newLine();
   }
 
   private double valueOfExpiredGroceries() {
@@ -269,10 +281,5 @@ public class UserInterfaceFlow {
       }
     }
     return userInput;
-  }
-
-  private void showAllGroceries() {
-    print(allGroceriesString());
-    printArrayList(foodStorage.getStorage());
   }
 }

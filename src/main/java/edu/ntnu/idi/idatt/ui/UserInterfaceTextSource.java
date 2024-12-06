@@ -3,9 +3,9 @@ package edu.ntnu.idi.idatt.ui;
 import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
 
 public class UserInterfaceTextSource {
-  private static final String RESET_COLOR = "\u001B[0m";
+  static final String RESET_COLOR = "\u001B[0m";
   // private static final String BLACK = "\u001B[30m";
-  private static final String RED = "\u001B[31m";
+  static final String RED = "\u001B[31m";
   private static final String GREEN = "\u001B[32m";
   // private static final String YELLOW = "\u001B[33m";
   // private static final String BLUE = "\u001B[34m";
@@ -90,6 +90,10 @@ public class UserInterfaceTextSource {
     String thirdPart = "-".repeat(12) + "+";
     String lastPart = "-".repeat(17);
     return header + firstPart + secondPart + thirdPart + lastPart;
+  }
+
+  public static String expired() {
+    return "All products that have expired";
   }
 
   public static String requestGroceryType() {
