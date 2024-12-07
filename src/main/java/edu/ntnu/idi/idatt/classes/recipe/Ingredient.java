@@ -59,4 +59,8 @@ public class Ingredient {
   public void setAllergic(boolean allergicBool) {
     this.allergies = allergicBool;
   }
+
+  public String info() {
+    return quantity + " " + unit + "\t" + name;
+  }
 }

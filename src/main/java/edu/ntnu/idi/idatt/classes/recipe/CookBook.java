@@ -23,4 +23,8 @@ public class CookBook {
   public void addRecipes(Recipe recipe) {
     recipes.add(recipe);
   }
+
+  public void removeRecipe(Recipe recipe) {
+    recipes.remove(recipe);
+  }
 }

@@ -55,8 +55,15 @@ public class UserInterfaceTextSource {
    * Creates a menu for what you want to do with the recipes.
    * You can choose between read recipe, use recipe or change recipes.
    */
-  public static String recipesMenuString() {
-    return "Options for recipes";
+  public static String recipesMenuText() {
+    return """
+      [1] Add recipe to cook book
+      [2] Remove recipe from cook book
+      [3] View all recipes
+      [4] Search for a recipe
+      [5] View suggested recipes
+      [6] Exit to main menu\r
+      """;
   }
 
   public static String searchOptionsString(FoodStorage foodStorage) {
@@ -128,7 +135,7 @@ public class UserInterfaceTextSource {
 
   public static String requestRecipeName() {
     String name = CYAN + "NAME" + RESET_COLOR;
-    return "Enter the " + name + " of the recipe you are adding";
+    return "Enter the " + name + " of the recipe";
   }
 
   public static String requestRecipeDescription() {

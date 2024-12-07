@@ -15,5 +15,24 @@ public class Recipe {
     this.portions = portions;
   }
 
+  public String info() {
+    String out = name + "\n" +
+        "Made for " + portions + " people\n" +
+        ingredientsOut() + "\n\t" +
+        description + "\n";
+    return out;
+  }
 
+  private String ingredientsOut() {
+    StringBuilder out = new StringBuilder();
+    out.append("Ingredients:\n");
+    for (Ingredient i : ingredients) {
+      out.append("-\t").append(i.info()).append("\n");
+    }
+    return out.toString();
+  }
+
+  public String getName() {
+    return name;
+  }
 }

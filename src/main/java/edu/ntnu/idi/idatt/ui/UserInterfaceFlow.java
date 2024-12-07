@@ -114,14 +114,15 @@ public class UserInterfaceFlow {
    * Prints name of different recipes that you know.
    */
   public void recipesMenu() {
-    byte max = 5;
-    byte userInput = byteInput(max, recipesMenuString());
+    byte max = 6;
+    byte userInput = byteInput(max, recipesMenuText());
 
     switch (userInput) {
       case 1 -> addRecipe();
       case 2 -> removeRecipe();
-      case 3 -> searchRecipe();
-      case 4 -> suggestedRecipe();
+      case 3 -> viewRecipes();
+      case 4 -> searchRecipe();
+      case 5 -> suggestedRecipe();
       default -> {
         return;
       }
@@ -140,11 +141,19 @@ public class UserInterfaceFlow {
     cookBook.addRecipes(recipe);
   }
 
-  private void addIngredients() {
-
+  private void removeRecipe() {
+    String name = stringInput(2, requestRecipeName());
+    for (Recipe recipe : cookBook.getRecipes()) {
+      if (name.equalsIgnoreCase(recipe.getName())) {
+        cookBook.removeRecipe(recipe);
+      }
+    }
   }
 
-  private void removeRecipe() {
+  private void viewRecipes() {
+    for (Recipe recipe : cookBook.getRecipes()) {
+      print(recipe.info());
+    }
   }
 
   private void searchRecipe() {
