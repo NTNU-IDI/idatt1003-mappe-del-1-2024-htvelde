@@ -1,23 +1,31 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
-public class Ingredients {
+/**
+ * <h1>Ingredient (Class)</h1>
+ * This class is stores all necessary values of an ingredient.
+ * You get the name, quantity, unit and if people may have an allergic reaction.
+ */
+public class Ingredient {
   private String name;
   private double quantity;
   private String unit;
   private boolean allergies;
 
-  public Ingredients(String name, double quantity, String unit, boolean allergies) {
+  /**
+   * <h1>Ingredient</h1>
+   * An Ingredient contains all necessary info of an Ingredient to the chef.
+   * That includes; name, quantity, unit and whether it may cause allergic reactions.
+   *
+   * @param name Depicting a name (singular).
+   * @param quantity How much is needed.
+   * @param unit Which measurement is used.
+   * @param allergies A boolean if it may cause allergies.
+   */
+  public Ingredient(String name, double quantity, String unit, boolean allergies) {
     this.name = name;
     this.quantity = quantity;
     this.unit = unit;
     this.allergies = allergies;
-  }
-
-  public Ingredients(String name, double quantity, String unit) {
-    this.name = name;
-    this.quantity = quantity;
-    this.unit = unit;
-    this.allergies = false;
   }
 
   public String getName() {
