@@ -126,6 +126,21 @@ public class UserInterfaceTextSource {
     return "Enter the " + name + " of the product you search for";
   }
 
+  public static String requestRecipeName() {
+    String name = CYAN + "NAME" + RESET_COLOR;
+    return "Enter the " + name + " of the recipe you are adding";
+  }
+
+  public static String requestRecipeDescription() {
+    String descriptiom = CYAN + "DESCRIPTION" + RESET_COLOR;
+    return "Enter the " + descriptiom + " of your recipe";
+  }
+
+  public static String requestRecipePortionSize() {
+    String portions = CYAN + "PORTIONS" + RESET_COLOR;
+    return "Enter the number of " + portions + " this recipe makes";
+  }
+
   public static String removeGroceryInformation() {
     String name = CYAN + "NAME" + RESET_COLOR;
     String quantity = CYAN + "QUANTITY" + RESET_COLOR;

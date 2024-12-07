@@ -2,10 +2,12 @@ package edu.ntnu.idi.idatt.ui;
 
 import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
 import edu.ntnu.idi.idatt.classes.foodStorage.Grocery;
+import edu.ntnu.idi.idatt.classes.recipe.CookBook;
+import edu.ntnu.idi.idatt.classes.recipe.Ingredient;
+import edu.ntnu.idi.idatt.classes.recipe.Recipe;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.InputMismatchException;
 
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPrice;
@@ -19,6 +21,7 @@ import static edu.ntnu.idi.idatt.ui.ValidateInput.*;
  */
 public class UserInterfaceFlow {
   FoodStorage foodStorage;
+  CookBook cookBook;
   UserInput input;
 
   /**
@@ -27,6 +30,7 @@ public class UserInterfaceFlow {
   public void init() {
     // Initialize the FoodStorage-class, and the other UI-classes
     this.foodStorage = new FoodStorage();
+    this.cookBook = new CookBook();
     this.input = new UserInput();
     print(welcome());
   }
@@ -125,6 +129,19 @@ public class UserInterfaceFlow {
   }
 
   private void addRecipe() {
+    String name = stringInput(2, requestRecipeName());
+
+    ArrayList<Ingredient> ingredients = ingredientsInput();
+
+    String description = stringInput(2, requestRecipeDescription());
+    int portions = intInput(1_000, requestRecipePortionSize());
+
+    Recipe recipe = new Recipe(name, description, ingredients, portions);
+    cookBook.addRecipes(recipe);
+  }
+
+  private void addIngredients() {
+
   }
 
   private void removeRecipe() {
@@ -203,6 +220,27 @@ public class UserInterfaceFlow {
     return userInput;
   }
 
+  private int intInput(int max, String menu) {
+    int userInput = 0;
+
+    boolean askAgain = true;
+    while (askAgain) {
+      printMenu(menu);
+      try {
+        userInput = input.inputInt();
+        if (!isValidInt(1, max, userInput)) {
+          throw new IllegalArgumentException();
+        }
+        askAgain = false;
+      } catch (IllegalArgumentException e) {
+        printUserInputError("Number not in valid range [1-" + max + "]");
+      } catch (InputMismatchException e) {
+        printUserInputError("Not a valid number");
+      }
+    }
+    return userInput;
+  }
+
   private double doubleInput(double min, double max, String menu) {
     double userInput = 0;
 
@@ -257,6 +295,49 @@ public class UserInterfaceFlow {
       }
     }
     return stringOut;
+  }
+
+  private boolean booleanInput(String request) {
+    String stringInput;
+    boolean output = false;
+
+    ArrayList<String> positive = new ArrayList<String>();
+    positive.add("true");
+    positive.add("1");
+    positive.add("yes");
+    positive.add("y");
+
+    boolean askAgain = true;
+    while (askAgain) {
+      print(request);
+      try {
+        stringInput = input.inputString(1);
+        // Required for the java-stream
+        String finalStringInput = stringInput;
+        output = positive.stream().anyMatch(m -> m.equalsIgnoreCase(finalStringInput));
+        askAgain = false;
+        System.err.println(output);
+      } catch (IllegalArgumentException e) {
+        printUserInputError(e.getMessage());
+      }
+    }
+    return output;
+  }
+
+  private ArrayList<Ingredient> ingredientsInput() {
+    ArrayList<Ingredient> ingredients = new ArrayList<>();
+    boolean askAgain = true;
+    while (askAgain) {
+      String name = stringInput(2, "Ingredient name");
+      double quantity = doubleInput(0, 1_000_000, requestQuantity());
+      String unit = stringInput(1, "Ingredient unit");
+      boolean allergies = booleanInput("Allergic");
+      askAgain = booleanInput("More ingredients?");
+
+      Ingredient ingredient = new Ingredient(name, quantity, unit, allergies);
+      ingredients.add(ingredient);
+    }
+    return ingredients;
   }
   
   private boolean isRestricted(String input, ArrayList<String> restrictions) {

@@ -44,6 +44,27 @@ public class UserInput {
   }
 
   /**
+   * <h1>inputInt</h1>
+   * This method asks for the user to input an int.
+   *
+   * @return Returns the int.
+   * @throws IllegalArgumentException Raises exception if invalid input.
+   */
+  public int inputInt() throws IllegalArgumentException, InputMismatchException {
+    int number = 0;
+
+    try {
+      number = scanner.nextInt();
+    }
+    catch (InputMismatchException e) {
+      scanner.next();
+      throw new InputMismatchException();
+    }
+
+    return number;
+  }
+
+  /**
    * <h1>inputDouble</h1>
    * This method asks for the user to input a float.<br>
    * If something besides a float is provided, it throws an exception.
