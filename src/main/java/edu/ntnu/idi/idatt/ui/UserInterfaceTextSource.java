@@ -32,12 +32,9 @@ public class UserInterfaceTextSource {
    */
   public static String mainMenuText() {
     return """
-      [1] Access the storage
-      [2] Add grocery to the storage
-      [3] Remove grocery from the storage
-      [4] Search for one specific grocery
-      [5] View recipes
-      [6] Exit\r
+      [1] Access the food storage
+      [2] Access recipes
+      [3] Exit\r
       """;
   }
 
@@ -163,9 +160,7 @@ public class UserInterfaceTextSource {
     return "Enter the number of " + portions + " this recipe makes";
   }
 
-  public static String removeGroceryInformation() {
-    String name = CYAN + "NAME" + RESET_COLOR;
-    String quantity = CYAN + "QUANTITY" + RESET_COLOR;
-    return "Enter the " + name + " and then " + quantity + " of the product you wish to remove";
+  public static String empty() {
+    return "It's empty, here is nothing to show.";
   }
 }

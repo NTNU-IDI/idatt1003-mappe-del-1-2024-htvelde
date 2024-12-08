@@ -62,16 +62,13 @@ public class UserInterfaceFlow {
    * @return returns a boolean to indicate whether the function should repeat or not.
    */
   public boolean mainMenu() {
-    byte max = 6;
+    final byte max = 3;
     byte userInput = byteInput(max, mainMenuText());
     boolean repeat = true;
 
     switch (userInput) {
       case 1 -> groceriesMenu();
-      case 2 -> addGrocery();
-      case 3 -> removeGrocery();
-      case 4 -> searchGrocery();
-      case 5 -> recipesMenu();
+      case 2 -> recipesMenu();
       default -> repeat = false;
     }
 
@@ -85,17 +82,19 @@ public class UserInterfaceFlow {
    * Each input are bytes.
    */
   public void groceriesMenu() {
-    byte max = 6;
-    byte userInput = byteInput(max, groceriesMenuText());
+    final byte max = 6;
 
-    switch (userInput) {
-      case 1 -> addGrocery();
-      case 2 -> removeGrocery();
-      case 3 -> searchGrocery();
-      case 4 -> expiredGroceries();
-      case 5 -> showAllGroceries();
-      default -> {
-        return;
+    boolean repeat = true;
+    while (repeat) {
+      byte userInput = byteInput(max, groceriesMenuText());
+
+      switch (userInput) {
+        case 1 -> addGrocery();
+        case 2 -> removeGrocery();
+        case 3 -> searchGrocery();
+        case 4 -> expiredGroceries();
+        case 5 -> showAllGroceries();
+        default -> repeat = false;
       }
     }
   }
@@ -133,17 +132,19 @@ public class UserInterfaceFlow {
    * Prints name of different recipes that you know.
    */
   public void recipesMenu() {
-    byte max = 6;
-    byte userInput = byteInput(max, recipesMenuText());
+    final byte max = 6;
 
-    switch (userInput) {
-      case 1 -> addRecipe();
-      case 2 -> removeRecipe();
-      case 3 -> viewRecipes();
-      case 4 -> searchRecipe();
-      case 5 -> suggestedRecipe();
-      default -> {
-        return;
+    boolean repeat = true;
+    while (repeat) {
+      byte userInput = byteInput(max, recipesMenuText());
+
+      switch (userInput) {
+        case 1 -> addRecipe();
+        case 2 -> removeRecipe();
+        case 3 -> viewRecipes();
+        case 4 -> searchRecipe();
+        case 5 -> suggestedRecipe();
+        default -> repeat = false;
       }
     }
   }
@@ -172,12 +173,15 @@ public class UserInterfaceFlow {
    * Removes a recipe by asking for the name of recipe to remove.
    */
   private void removeRecipe() {
-    String name = stringInput(2, requestRecipeName());
-    for (Recipe recipe : cookBook.getRecipes()) {
-      if (name.equalsIgnoreCase(recipe.getName())) {
-        cookBook.removeRecipe(recipe);
-      }
+    viewRecipes();
+    String recipeName = stringInput(2, requestGroceryType());
+
+    int result = cookBook.searchRecipes(recipeName);
+    if (result == -1) {
+      return;
     }
+    cookBook.removeRecipe(cookBook.getRecipes().get(result));
+    newLine();
   }
 
   /**
@@ -188,6 +192,11 @@ public class UserInterfaceFlow {
    * You must search for a recipe to show what it contains.
    */
   private void viewRecipes() {
+    if (cookBook.getRecipes().isEmpty()) {
+      print(empty());
+      return;
+    }
+
     for (Recipe recipe : cookBook.getRecipes()) {
       print(recipe.getName());
     }
@@ -216,7 +225,6 @@ public class UserInterfaceFlow {
       searchRecipe();
     }
 
-    System.err.println("Search" + searchResult);
     print(cookBook.getRecipes().get(searchResult).info());
   }
 
@@ -258,12 +266,15 @@ public class UserInterfaceFlow {
    * Grocery deletes when more is removed than possible.
    */
   private void removeGrocery() {
-    print(removeGroceryInformation());
     String typeName = stringInput(2, requestGroceryType());
     double quantity = doubleInput(0, 1_000_000, requestQuantity());
 
-    foodStorage.getStorage().get(foodStorage.searchGroceries(typeName)).removeGrocery(quantity);
-    System.out.println("Removed groceries");
+    int result = foodStorage.searchGroceries(typeName);
+    if (result == -1) {
+      return;
+    }
+
+    foodStorage.getStorage().get(result).removeGrocery(quantity);
     newLine();
   }
 
@@ -273,12 +284,14 @@ public class UserInterfaceFlow {
    * Prints a nice overview of what is in the foodStorage.
    */
   private void showAllGroceries() {
+    if (foodStorage.getStorage().isEmpty()) {
+      print(empty());
+      return;
+    }
     print(allGroceriesString());
     printArrayList(foodStorage.getStorage());
     newLine();
   }
-
-  //TODO: Fix that thing
 
   /**
    * <h5>Method</h5>
@@ -292,7 +305,7 @@ public class UserInterfaceFlow {
     print(expired());
     print(allGroceriesString());
     printArrayList(foodStorage.getExpired());
-    print(valueOfExpiredGroceries() + " kr");
+    print("Net loss of " + valueOfExpiredGroceries() + " kr");
     print(RESET_COLOR);
     newLine();
   }

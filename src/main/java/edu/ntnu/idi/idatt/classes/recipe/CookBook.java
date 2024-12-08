@@ -34,7 +34,6 @@ public class CookBook {
         .filter(recipe -> recipe.getName().strip().equalsIgnoreCase(searchString.strip()))
         .findFirst();
 
-    System.err.println("En gang");
     return searchResult.map(recipes::indexOf).orElse(-1);
   }
 }
