@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.ui;
 
-import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.classes.foodstorage.FoodStorage;
 import edu.ntnu.idi.idatt.classes.recipe.CookBook;
 
 public class UserInterfaceTextSource {

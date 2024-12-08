@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.classes.foodStorage;
+package edu.ntnu.idi.idatt.classes.foodstorage;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
@@ -34,7 +34,11 @@ public class Grocery {
    * @param expirationDate - When the food turns bad
    * @param price - How much this batch costed
    */
-  public Grocery(String groceryType, String unit, double quantity, LocalDate expirationDate, double price) {
+  public Grocery(String groceryType,
+                 String unit,
+                 double quantity,
+                 LocalDate expirationDate,
+                 double price) {
     this.groceryType = groceryType;
     this.unit = unit;
     this.quantity = quantity;
@@ -43,7 +47,11 @@ public class Grocery {
   }
 
   public String info() {
-    return this.groceryType + " " + this.quantity + " " + this.unit + " " + this.expiryDate + " " + this.price + " kr";
+    return this.groceryType + " "
+        + this.quantity + " "
+        + this.unit + " "
+        + this.expiryDate + " "
+        + this.price + " kr";
   }
 
   public double getQuantity() {
@@ -52,6 +60,10 @@ public class Grocery {
 
   public ChronoLocalDate getExpiryDate() {
     return expiryDate;
+  }
+
+  public boolean hasExpired() {
+    return expiryDate.isBefore(LocalDate.now());
   }
 
   public double getPrice() {

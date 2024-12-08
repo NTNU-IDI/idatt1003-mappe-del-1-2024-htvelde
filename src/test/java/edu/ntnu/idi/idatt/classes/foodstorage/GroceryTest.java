@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.classes.foodStorage;
+package edu.ntnu.idi.idatt.classes.foodstorage;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

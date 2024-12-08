@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.ui;
 
-import edu.ntnu.idi.idatt.classes.foodStorage.Groceries;
-
+import edu.ntnu.idi.idatt.classes.foodstorage.Groceries;
 import java.util.ArrayList;
 
 public class UserInterfacePrintOut {

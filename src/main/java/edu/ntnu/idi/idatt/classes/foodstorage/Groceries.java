@@ -1,12 +1,13 @@
-package edu.ntnu.idi.idatt.classes.foodStorage;
+package edu.ntnu.idi.idatt.classes.foodstorage;
 
+import edu.ntnu.idi.idatt.ui.UserInterfaceFlow;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
+ * <h5>Class</h5>
+ * <h3>Groceries</h3>
  * Here is the implementation of each kind of groceries.
  * That includes keeping track on the oldest items in inventory.
  */
@@ -18,13 +19,15 @@ public class Groceries {
   private LocalDate groceryOldestDate;
 
   /**
+   * <h5>Constructor</h5>
+   * <h3>Groceries</h3>
    * Constructor for the Grocery-class.
    *
-   * @param groceryName - Name on grocery
-   * @param groceryUnit - Unit of measurement
-   * @param quantity - How much it is
-   * @param expirationDate - When the food will turn bad
-   * @param groceryPrice - How much the specific grocery cost
+   * @param groceryName Name on grocery
+   * @param groceryUnit Unit of measurement
+   * @param quantity How much it is
+   * @param expirationDate When the food will turn bad
+   * @param groceryPrice How much the specific grocery cost
    */
   public Groceries(String groceryName,
                    String groceryUnit,
@@ -39,6 +42,13 @@ public class Groceries {
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>info()</h3>
+   * Returns a nice informative string instead of toString.
+   *
+   * @return Nice string to be printed.
+   */
   public String info() {
     // Made partially by AI-prompt in ChatGPT.
     // The take-away from the prompt was how to use substring and how to pad text.
@@ -77,19 +87,26 @@ public class Groceries {
     return name + " | "  + quantity + " " + unit + " | " + price + " kr | " + expiration;
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getGroceries()</h3>
+   * Gives access to what is stored in the groceries list.
+   *
+   * @return ArrayList of groceries.
+   */
   public ArrayList<Grocery> getGroceries() {
     return groceries;
   }
 
-  // Methods
-
   /**
+   * <h5>Method</h5>
+   * <h3>groceryType()</h3>
    * Adds a grocery to the list of groceries.
    *
-   * @param groceryType - Name of the grocery type
-   * @param quantity - How much it is
-   * @param expiryDate - When it will turn bad
-   * @param price - How much it costed
+   * @param groceryType Name of the grocery type
+   * @param quantity How much it is
+   * @param expiryDate When it will turn bad
+   * @param price How much it costed
    */
   public void addGrocery(
       String groceryType,
@@ -104,6 +121,13 @@ public class Groceries {
     this.oldestDate();
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>removeGrocery()</h3>
+   * Removes a given quantity from grocery based on the parameter.
+   *
+   * @param quantity How much should be removed.
+   */
   public void removeGrocery(double quantity) {
     if (quantity >= totalQuantity()) {
       groceries.removeAll(groceries);
@@ -124,18 +148,32 @@ public class Groceries {
     }
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>sortGrocery()</h3>
+   * This method mutates the groceries-field to be sorted.
+   */
   public void sortGrocery() {
     groceries.sort(Comparator.comparing(Grocery::getExpiryDate));
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getGroceryName()</h3>
+   * Gives only the name of the grocery.
+   *
+   * @return Name of grocery.
+   */
   public String getGroceryName() {
     return groceryName;
   }
 
   /**
+   * <h5>Method</h5>
+   * <h3>totalQuantity()</h3>
    * Used to get the total amount of groceries in the storage.
    *
-   * @return - Returns total amount of the grocery
+   * @return Returns total amount of the grocery
    */
   public double totalQuantity() {
     double tempQuantity = 0;
@@ -149,9 +187,11 @@ public class Groceries {
   }
 
   /**
+   * <h5>Method</h5>
+   * <h3>totalPrice()</h3>
    * Used to get the total cost of groceries in the storage.
    *
-   * @return - Returns total cost
+   * @return Returns total cost
    */
   public double totalPrice() {
     double tempPrice = 0;
@@ -165,7 +205,9 @@ public class Groceries {
   }
 
   /**
-   * Searches for the first item that will expire, and mutates field-value thereafter.
+   * <h5>Method</h5>
+   * <h3>oldestDate()</h3>
+   * Searches for the first item that will expire, and mutates field-values thereafter.
    */
   public void oldestDate() {
     sortGrocery();
@@ -179,14 +221,70 @@ public class Groceries {
     this.groceryOldestDate = tempDate;
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>hasExpired()</h3>
+   * Returns a boolean value to indicate if a grocery has expired.
+   *
+   * @return Returns true if expired, else returns false.
+   */
   public boolean hasExpired() {
     return groceryOldestDate.isBefore(LocalDate.now());
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getExpiredGroceries()</h3>
+   * Finds all the specific groceries that have expired, then returns them.
+   *
+   * @return All expired groceries of the implicit given type.
+   */
+  public ArrayList<Grocery> getExpiredGroceries() {
+    ArrayList<Grocery> expiredGroceries = new ArrayList<>();
+    for (Grocery g : groceries) {
+      if (g.getExpiryDate().isBefore(LocalDate.now())) {
+        expiredGroceries.add(g);
+      }
+    }
+    return expiredGroceries;
+  }
+
+  /**
+   * <h5>Method</h5>
+   * <h3>getExpiredValue()</h3>
+   * Finds the value of all the expired groceries.<br>
+   * <i>In junction with the similar method in UserInterfaceFlow,
+   * they make out my favourite java-stream-functions</i>
+   *
+   * @return A double that is the accumulative sum of all expired groceries.
+   *
+   * @see UserInterfaceFlow#valueOfExpiredGroceries()
+   */
+  public double getExpiredValue() {
+    return getExpiredGroceries().stream()
+        .filter(grocery -> grocery.hasExpired())
+        .mapToDouble(grocery -> grocery.getPrice())
+        .sum();
+  }
+
+  /**
+   * <h5>Method</h5>
+   * <h3>getGroceryUnit()</h3>
+   * Returns the unit of measurement of the given grocery.
+   *
+   * @return String indicating unit of measurement.
+   */
   public String getGroceryUnit() {
     return groceryUnit;
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>isEmpty()</h3>
+   * Checks if the grocery is empty.
+   *
+   * @return Returns true if empty, else returns false.
+   */
   public boolean isEmpty() {
     sortGrocery();
     for (Grocery g : groceries) {

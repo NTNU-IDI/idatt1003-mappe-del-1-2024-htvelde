@@ -1,7 +1,5 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
-import edu.ntnu.idi.idatt.classes.foodStorage.Groceries;
-
 import java.util.ArrayList;
 import java.util.Optional;
 

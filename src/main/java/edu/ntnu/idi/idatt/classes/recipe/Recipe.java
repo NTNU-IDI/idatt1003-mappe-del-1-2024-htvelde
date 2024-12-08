@@ -16,10 +16,10 @@ public class Recipe {
   }
 
   public String info() {
-    String out = name + "\n" +
-        "Made for " + portions + " people\n" +
-        ingredientsOut() + "\n\t" +
-        description + "\n";
+    String out = name + "\n"
+        + "Made for " + portions + " people\n"
+        + ingredientsOut() + "\n\t"
+        + description + "\n";
     return out;
   }
 
