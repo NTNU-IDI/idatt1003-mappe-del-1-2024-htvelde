@@ -1,6 +1,9 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
+import edu.ntnu.idi.idatt.classes.foodStorage.Groceries;
+
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class CookBook {
   private final ArrayList<Recipe> recipes =  new ArrayList<Recipe>();
@@ -26,5 +29,14 @@ public class CookBook {
 
   public void removeRecipe(Recipe recipe) {
     recipes.remove(recipe);
+  }
+
+  public int searchRecipes(String searchString) {
+    Optional<Recipe> searchResult = recipes.stream()
+        .filter(recipe -> recipe.getName().strip().equalsIgnoreCase(searchString.strip()))
+        .findFirst();
+
+    System.err.println("En gang");
+    return searchResult.map(recipes::indexOf).orElse(-1);
   }
 }

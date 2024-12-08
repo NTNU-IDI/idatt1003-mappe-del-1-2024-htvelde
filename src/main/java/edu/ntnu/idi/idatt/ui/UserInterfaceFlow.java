@@ -90,7 +90,7 @@ public class UserInterfaceFlow {
    */
   public void searchGrocery() {
     // Builds a string-block from the groceries in the food storage
-    String searchOptions = searchOptionsString(foodStorage);
+    String searchOptions = searchGroceryString(foodStorage);
 
     print(searchOptions);
     String searchString = input.inputString(2);
@@ -152,11 +152,27 @@ public class UserInterfaceFlow {
 
   private void viewRecipes() {
     for (Recipe recipe : cookBook.getRecipes()) {
-      print(recipe.info());
+      print(recipe.getName());
     }
   }
 
   private void searchRecipe() {
+    String searchOptions = searchRecipeString(cookBook);
+    print(searchOptions);
+
+    String searchString = input.inputString(2);
+
+    if (searchString.equalsIgnoreCase("exit")) {
+      return;
+    }
+
+    int searchResult = cookBook.searchRecipes(searchString.toLowerCase());
+    if (searchResult == -1) {
+      searchRecipe();
+    }
+
+    System.err.println("Search" + searchResult);
+    print(cookBook.getRecipes().get(searchResult).info());
   }
 
   private void suggestedRecipe() {

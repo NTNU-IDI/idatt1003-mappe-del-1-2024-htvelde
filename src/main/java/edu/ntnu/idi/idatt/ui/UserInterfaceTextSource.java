@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.ui;
 
 import edu.ntnu.idi.idatt.classes.foodStorage.FoodStorage;
+import edu.ntnu.idi.idatt.classes.recipe.CookBook;
 
 public class UserInterfaceTextSource {
   static final String RESET_COLOR = "\u001B[0m";
@@ -66,13 +67,27 @@ public class UserInterfaceTextSource {
       """;
   }
 
-  public static String searchOptionsString(FoodStorage foodStorage) {
-    String searchText = "You may enter the name of a specific grocery";
+  public static String searchGroceryString(FoodStorage foodStorage) {
+    String searchText = "Enter the name of a specific grocery";
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(searchText);
     stringBuilder.append("\n");
     for (int i = 0; i < foodStorage.getStorage().size(); i++) {
       stringBuilder.append(foodStorage.getStorage().get(i).getGroceryName());
+      stringBuilder.append("\n");
+    }
+    stringBuilder.append("Enter [exit] to exit");
+
+    return stringBuilder.toString();
+  }
+
+  public static String searchRecipeString(CookBook cookBook) {
+    String searchText = "Enter the name of a specific recipe";
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(searchText);
+    stringBuilder.append("\n");
+    for (int i = 0; i < cookBook.getRecipes().size(); i++) {
+      stringBuilder.append(cookBook.getRecipes().get(i).getName());
       stringBuilder.append("\n");
     }
     stringBuilder.append("Enter [exit] to exit");
