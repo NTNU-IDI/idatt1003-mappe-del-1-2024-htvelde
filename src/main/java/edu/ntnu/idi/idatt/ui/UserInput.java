@@ -18,7 +18,7 @@ import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
  * @see Scanner
  */
 public class UserInput {
-  private final Scanner scanner = new Scanner(System.in);
+  private final Scanner scanner = new Scanner(System.in).useDelimiter("\n");
 
   /**
    * <h1>inputByte</h1>
