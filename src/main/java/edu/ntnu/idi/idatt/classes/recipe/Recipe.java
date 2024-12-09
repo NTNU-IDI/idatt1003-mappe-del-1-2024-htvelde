@@ -6,21 +6,26 @@ public class Recipe {
   private String name;
   private String description;
   private ArrayList<Ingredient> ingredients;
+  private String procedure;
   private int portions;
 
-  public Recipe(String name, String description, ArrayList<Ingredient> ingredients, int portions) {
+  public Recipe(String name,
+                String description,
+                ArrayList<Ingredient> ingredients,
+                String procedure,
+                int portions) {
     this.name = name;
     this.description = description;
     this.ingredients = ingredients;
+    this.procedure = procedure;
     this.portions = portions;
   }
 
   public String info() {
-    String out = name + "\n"
+    return name + "\n"
         + "Made for " + portions + " people\n"
         + ingredientsOut() + "\n\t"
         + description + "\n";
-    return out;
   }
 
   private String ingredientsOut() {
@@ -34,5 +39,9 @@ public class Recipe {
 
   public String getName() {
     return name;
+  }
+
+  public ArrayList<Ingredient> getIngredients() {
+    return ingredients;
   }
 }

@@ -111,6 +111,10 @@ public class UserInterfaceTextSource {
     return header + firstPart + secondPart + thirdPart + lastPart;
   }
 
+  public static String noSuggestions() {
+    return "There are no recipes you can make with what you have.";
+  }
+
   public static String expired() {
     return "All products that have expired";
   }
@@ -158,6 +162,10 @@ public class UserInterfaceTextSource {
   public static String requestRecipePortionSize() {
     String portions = CYAN + "PORTIONS" + RESET_COLOR;
     return "Enter the number of " + portions + " this recipe makes";
+  }
+
+  public static String procedure() {
+    return "Describe the procedure";
   }
 
   public static String empty() {

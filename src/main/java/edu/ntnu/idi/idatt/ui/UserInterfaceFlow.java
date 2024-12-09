@@ -11,6 +11,8 @@ import edu.ntnu.idi.idatt.classes.foodstorage.Grocery;
 import edu.ntnu.idi.idatt.classes.recipe.CookBook;
 import edu.ntnu.idi.idatt.classes.recipe.Ingredient;
 import edu.ntnu.idi.idatt.classes.recipe.Recipe;
+import edu.ntnu.idi.idatt.classes.recipe.SuggestedRecipes;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -105,6 +107,11 @@ public class UserInterfaceFlow {
    * Prints all the groceries of a user-specified type.
    */
   public void searchGrocery() {
+    if (foodStorage.getStorage().isEmpty()) {
+      print(empty());
+      return;
+    }
+
     // Builds a string-block from the groceries in the food storage
     String searchOptions = searchGroceryString(foodStorage);
 
@@ -162,8 +169,9 @@ public class UserInterfaceFlow {
 
     String description = stringInput(2, requestRecipeDescription());
     int portions = intInput(1_000, requestRecipePortionSize());
+    String procedure = stringInput(2, procedure());
 
-    Recipe recipe = new Recipe(name, description, ingredients, portions);
+    Recipe recipe = new Recipe(name, description, ingredients, procedure, portions);
     cookBook.addRecipes(recipe);
   }
 
@@ -211,6 +219,11 @@ public class UserInterfaceFlow {
    * with name, ingredients, description.
    */
   private void searchRecipe() {
+    if (cookBook.getRecipes().isEmpty()) {
+      print(empty());
+      return;
+    }
+
     String searchOptions = searchRecipeString(cookBook);
     print(searchOptions);
 
@@ -231,9 +244,40 @@ public class UserInterfaceFlow {
   /**
    * <h5>Method</h5>
    * <h3>suggestedRecipe()</h3>
-   * Shows name of all recipes that you can make.
+   * Shows the names of all recipes that you can make. The method is not case sensitive.<br>
+   *
+   * <b><i>Mark that all ingredients must be spelled like its counterpart!</i></b>
    */
   private void suggestedRecipe() {
+    if (cookBook.getRecipes().isEmpty()
+        || foodStorage.getStorage().isEmpty()
+        || cookBook.getRecipes().size() < foodStorage.getStorage().size()) {
+      print(noSuggestions());
+      return;
+    }
+
+    // Eliminate candidates that have not met the sublist condition.
+    ArrayList<SuggestedRecipes> sublistOfRecipes = new ArrayList<>();
+    ArrayList<Groceries> apparentGroceries;
+    for (Recipe recipe : cookBook.getRecipes()) {
+      apparentGroceries = new ArrayList<>();
+      for (Groceries grocery : foodStorage.getStorage()) {
+        if (recipe.getName().equalsIgnoreCase(grocery.getGroceryName())) {
+          apparentGroceries.add(grocery);
+        };
+      }
+      if (!apparentGroceries.isEmpty()) {
+        sublistOfRecipes.add(new SuggestedRecipes(recipe, apparentGroceries));
+      }
+    }
+
+    // Eliminate all candidates with enough ingredients for less than 1 portion.
+    int portions;
+    for (SuggestedRecipes suggestion : sublistOfRecipes) {
+
+    }
+
+    // Also determine how many portions you could make.
   }
 
   /**
