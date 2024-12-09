@@ -14,7 +14,11 @@ public class CookBook {
     pancakeIngredients.add(new Ingredient("egg", 4, "ea", true));
     pancakeIngredients.add(new Ingredient("butter", 1, "tbsp", true));
 
-    recipes.add(new Recipe("Desert pancakes", "Mix all, then fry.", pancakeIngredients, 4));
+    recipes.add(new Recipe("Desert pancakes",
+        "Super easy and tasty pancakes!",
+        pancakeIngredients,
+        "Mix all, then fry.",
+        4));
   }
 
   public ArrayList<Recipe> getRecipes() {
