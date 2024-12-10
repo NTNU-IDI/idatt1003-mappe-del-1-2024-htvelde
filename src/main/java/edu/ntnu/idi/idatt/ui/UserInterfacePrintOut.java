@@ -44,6 +44,12 @@ public class UserInterfacePrintOut {
     System.out.println(requestSearchName);
   }
 
+  public static void printTotalValueOfGroceries(ArrayList<Groceries> groceries) {
+    double totalValueOfGroceries = groceries.stream()
+        .mapToDouble(Groceries::totalPrice).sum();
+    System.out.println("Total value is " + totalValueOfGroceries + " kr.");
+  }
+
   public static void printArrayList(ArrayList<Groceries> arrayList) {
     arrayList.forEach(m -> print(m.info()));
   }

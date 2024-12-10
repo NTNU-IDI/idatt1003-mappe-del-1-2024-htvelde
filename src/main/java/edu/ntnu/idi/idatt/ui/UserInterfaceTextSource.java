@@ -4,10 +4,10 @@ import edu.ntnu.idi.idatt.classes.foodstorage.FoodStorage;
 import edu.ntnu.idi.idatt.classes.recipe.CookBook;
 
 public class UserInterfaceTextSource {
-  static final String RESET_COLOR = "\u001B[0m";
+  public static final String RESET_COLOR = "\u001B[0m";
   // private static final String BLACK = "\u001B[30m";
-  static final String RED = "\u001B[31m";
-  private static final String GREEN = "\u001B[32m";
+  public static final String RED = "\u001B[31m";
+  public static final String GREEN = "\u001B[32m";
   // private static final String YELLOW = "\u001B[33m";
   // private static final String BLUE = "\u001B[34m";
   // private static final String PURPLE = "\u001B[35m";
@@ -40,12 +40,13 @@ public class UserInterfaceTextSource {
 
   public static String groceriesMenuText() {
     return """
-      [1] Add grocery to food storage
-      [2] Remove grocery from food storage
-      [3] Search for a grocery from food storage
-      [4] View expired groceries from food storage
-      [5] View all stored groceries
-      [6] Exit to main menu\r
+      [1] Add grocery
+      [2] Remove grocery
+      [3] View all stored groceries
+      [4] Search grocery
+      [5] View expired groceries
+      [6] Get total value of food storage
+      [7] Exit to main menu\r
       """;
   }
 
@@ -155,8 +156,8 @@ public class UserInterfaceTextSource {
   }
 
   public static String requestRecipeDescription() {
-    String descriptiom = CYAN + "DESCRIPTION" + RESET_COLOR;
-    return "Enter the " + descriptiom + " of your recipe";
+    String description = CYAN + "DESCRIPTION" + RESET_COLOR;
+    return "Enter the " + description + " of your recipe";
   }
 
   public static String requestRecipePortionSize() {

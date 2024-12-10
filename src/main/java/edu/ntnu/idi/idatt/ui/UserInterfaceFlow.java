@@ -12,10 +12,11 @@ import edu.ntnu.idi.idatt.classes.recipe.CookBook;
 import edu.ntnu.idi.idatt.classes.recipe.Ingredient;
 import edu.ntnu.idi.idatt.classes.recipe.Recipe;
 import edu.ntnu.idi.idatt.classes.recipe.SuggestedRecipes;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.InputMismatchException;
+import java.util.Optional;
 
 /**
  * <h5>Class</h5>
@@ -84,7 +85,7 @@ public class UserInterfaceFlow {
    * Each input are bytes.
    */
   public void groceriesMenu() {
-    final byte max = 6;
+    final byte max = 7;
 
     boolean repeat = true;
     while (repeat) {
@@ -93,44 +94,13 @@ public class UserInterfaceFlow {
       switch (userInput) {
         case 1 -> addGrocery();
         case 2 -> removeGrocery();
-        case 3 -> searchGrocery();
-        case 4 -> expiredGroceries();
-        case 5 -> showAllGroceries();
+        case 3 -> showAllGroceries();
+        case 4 -> searchGrocery();
+        case 5 -> expiredGroceries();
+        case 6 -> showTotalValueOfGroceries();
         default -> repeat = false;
       }
     }
-  }
-
-  /**
-   * <h5>Method</h5>
-   * <h3>searchGrocery()</h3>
-   * Prints all the groceries of a user-specified type.
-   */
-  public void searchGrocery() {
-    if (foodStorage.getStorage().isEmpty()) {
-      print(empty());
-      return;
-    }
-
-    // Builds a string-block from the groceries in the food storage
-    String searchOptions = searchGroceryString(foodStorage);
-
-    print(searchOptions);
-    String searchString = input.inputString(2);
-
-    if (searchString.equalsIgnoreCase("exit")) {
-      return;
-    }
-
-    int searchResult = foodStorage.searchGroceries(searchString.toLowerCase());
-    if (searchResult == -1) {
-      searchGrocery();
-    }
-
-    for (Grocery grocery : foodStorage.getStorage().get(searchResult).getGroceries()) {
-      print(grocery.info());
-    }
-
   }
 
   /**
@@ -158,6 +128,41 @@ public class UserInterfaceFlow {
 
   /**
    * <h5>Method</h5>
+   * <h3>searchGrocery()</h3>
+   * Prints all the groceries of a user-specified type.
+   */
+  public void searchGrocery() {
+    newLine();
+
+    if (foodStorage.getStorage().isEmpty()) {
+      print(empty());
+      return;
+    }
+
+    // Builds a string-block from the groceries in the food storage
+    String searchOptions = searchGroceryString(foodStorage);
+
+    print(searchOptions);
+    String searchString = input.inputString(2);
+
+    if (searchString.equalsIgnoreCase("exit")) {
+      return;
+    }
+
+    int searchResult = foodStorage.searchGroceries(searchString.toLowerCase());
+    if (searchResult == -1) {
+      searchGrocery();
+    }
+
+    for (Grocery grocery : foodStorage.getStorage().get(searchResult).getGroceries()) {
+      print(grocery.info());
+    }
+
+    newLine();
+  }
+
+  /**
+   * <h5>Method</h5>
    * <h3>addRecipe()</h3>
    * Recipes aren't made by themselves, someone must be making them.
    * But you are in luck, some delicious desert pancakes are included!
@@ -168,7 +173,7 @@ public class UserInterfaceFlow {
     ArrayList<Ingredient> ingredients = ingredientsInput();
 
     String description = stringInput(2, requestRecipeDescription());
-    int portions = intInput(1_000, requestRecipePortionSize());
+    int portions = intInput(requestRecipePortionSize());
     String procedure = stringInput(2, procedure());
 
     Recipe recipe = new Recipe(name, description, ingredients, procedure, portions);
@@ -249,12 +254,15 @@ public class UserInterfaceFlow {
    * <b><i>Mark that all ingredients must be spelled like its counterpart!</i></b>
    */
   private void suggestedRecipe() {
+    System.err.println("Suggested Recipe 1");
     if (cookBook.getRecipes().isEmpty()
         || foodStorage.getStorage().isEmpty()
         || cookBook.getRecipes().size() < foodStorage.getStorage().size()) {
       print(noSuggestions());
       return;
     }
+
+    System.err.println("Suggested Recipe 2");
 
     // Eliminate candidates that have not met the sublist condition.
     ArrayList<SuggestedRecipes> sublistOfRecipes = new ArrayList<>();
@@ -264,18 +272,20 @@ public class UserInterfaceFlow {
       for (Groceries grocery : foodStorage.getStorage()) {
         if (recipe.getName().equalsIgnoreCase(grocery.getGroceryName())) {
           apparentGroceries.add(grocery);
-        };
+        }
       }
       if (!apparentGroceries.isEmpty()) {
         sublistOfRecipes.add(new SuggestedRecipes(recipe, apparentGroceries));
       }
     }
 
-    // Eliminate all candidates with enough ingredients for less than 1 portion.
-    int portions;
-    for (SuggestedRecipes suggestion : sublistOfRecipes) {
+    System.err.println("Suggested Recipe 3");
 
-    }
+    // Eliminate all candidates with enough ingredients for less than 1 portion.
+    Optional<SuggestedRecipes> portions = sublistOfRecipes.stream()
+        .min(Comparator.comparing(SuggestedRecipes::getPortions));
+
+    System.err.println(portions);
 
     // Also determine how many portions you could make.
   }
@@ -288,19 +298,22 @@ public class UserInterfaceFlow {
    * A suggestion is to keep all names singular, to avoid duplicates.
    */
   private void addGrocery() {
-    ArrayList<String> restrictions = new ArrayList<String>();
+    ArrayList<String> restrictions = new ArrayList<>();
     restrictions.add("exit");
 
-    String typeName = stringInput(2, requestGroceryType(), restrictions);
+    newLine();
+    String typeName = stringInput(requestGroceryType(), restrictions);
+    double quantity = doubleInput(requestQuantity());
     String unit =
         (foodStorage.searchGroceries(typeName) == -1)
         ? stringInput(1, requestUnit())
         : foodStorage.getUnit(typeName);
-    double quantity = doubleInput(0, 1_000_000, requestQuantity());
-    double price = doubleInput(0, 1_000_000, requestPrice());
+    double price = doubleInput(requestPrice());
     LocalDate date = dateInput(requestDate());
 
     foodStorage.addToGroceries(typeName, unit, quantity, date, price);
+
+    newLine();
   }
 
   /**
@@ -310,8 +323,10 @@ public class UserInterfaceFlow {
    * Grocery deletes when more is removed than possible.
    */
   private void removeGrocery() {
+    newLine();
+
     String typeName = stringInput(2, requestGroceryType());
-    double quantity = doubleInput(0, 1_000_000, requestQuantity());
+    double quantity = doubleInput(requestQuantity());
 
     int result = foodStorage.searchGroceries(typeName);
     if (result == -1) {
@@ -328,6 +343,8 @@ public class UserInterfaceFlow {
    * Prints a nice overview of what is in the foodStorage.
    */
   private void showAllGroceries() {
+    newLine();
+
     if (foodStorage.getStorage().isEmpty()) {
       print(empty());
       return;
@@ -345,26 +362,39 @@ public class UserInterfaceFlow {
    * are shown, despite not necessarily being expired.
    */
   private void expiredGroceries() {
+    newLine();
+
     print(RED);
     print(expired());
     print(allGroceriesString());
     printArrayList(foodStorage.getExpired());
-    print("Net loss of " + valueOfExpiredGroceries() + " kr");
+    showTotalValueOfGroceries(foodStorage.getExpired());
     print(RESET_COLOR);
     newLine();
   }
 
   /**
    * <h5>Method</h5>
-   * <h3>valueOfExpiredGroceries()</h3>
-   * The effect of this function is just to show how much value
-   * that have accumulated of expired groceries.
+   * <h3>showTotalValueOfGroceries(ArrayList groceries)</h3>
+   * Show total value of all groceries in an ArrayList.
    *
-   * @return total price of only the expired groceries.
+   * @param groceries ArrayList with all groceries.
    */
-  private double valueOfExpiredGroceries() {
-    return foodStorage.getExpired().stream()
-        .mapToDouble(Groceries::getExpiredValue).sum();
+  private void showTotalValueOfGroceries(ArrayList<Groceries> groceries) {
+    newLine();
+    printTotalValueOfGroceries(groceries);
+    newLine();
+  }
+
+  /**
+   * <h5>Method</h5>
+   * <h3>showTotalValueOfGroceries()</h3>
+   * Show total value of all groceries stored in the food storage.
+   */
+  private void showTotalValueOfGroceries() {
+    newLine();
+    printTotalValueOfGroceries(foodStorage.getStorage());
+    newLine();
   }
 
   /**
@@ -406,11 +436,10 @@ public class UserInterfaceFlow {
    * then makes sure it is a valid int (a value between <b>0 and max</b>.
    * If it is not, it repeats itself until the user enters a valid int.
    *
-   * @param max Upper limit of input.
    * @param menu A string that is informative of what input is expected.
    * @return Returns a valid int.
    */
-  private int intInput(int max, String menu) {
+  private int intInput(String menu) {
     int userInput = 0;
 
     boolean askAgain = true;
@@ -418,12 +447,12 @@ public class UserInterfaceFlow {
       printMenu(menu);
       try {
         userInput = input.inputInt();
-        if (!isValidInt(1, max, userInput)) {
+        if (!isValidInt(1, 1_000_000_000, userInput)) {
           throw new IllegalArgumentException();
         }
         askAgain = false;
       } catch (IllegalArgumentException e) {
-        printUserInputError("Number not in valid range [1-" + max + "]");
+        printUserInputError("Number not in valid range [1-" + 1000 + "]");
       } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
       }
@@ -439,12 +468,10 @@ public class UserInterfaceFlow {
    * If it is not, it repeats itself until the user enters a valid double.<br>
    * <b><i>Notice that the decimal point is "," and not ".".</i></b>
    *
-   * @param min Lower limit of input.
-   * @param max Upper limit of input.
    * @param menu A string that is informative of what input is expected.
    * @return Returns a double that commonly depicts a quantity or price.
    */
-  private double doubleInput(double min, double max, String menu) {
+  private double doubleInput(String menu) {
     double userInput = 0;
 
     boolean askAgain = true;
@@ -452,12 +479,14 @@ public class UserInterfaceFlow {
       printMenu(menu);
       try {
         userInput = input.inputDouble();
-        if (!isValidDouble(min, max, userInput)) {
+        if (!isValidDouble(0, 1_000_000_000, userInput)) {
           throw new IllegalArgumentException();
         }
         askAgain = false;
       } catch (IllegalArgumentException e) {
-        printUserInputError("Number not in valid range [" + min + "-" + max + "]");
+        printUserInputError("Number not in valid range ["
+            + (double) 0 + "-" + (double) 1000000
+            + "]");
       } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
       }
@@ -499,18 +528,17 @@ public class UserInterfaceFlow {
    * If it is not, it repeats itself until the user enters a valid double.<br>
    * <b><i>You can enter an ArrayList&lt String &gt with unavailable input.</i></b>
    *
-   * @param minLength Lower limit of string length.
-   * @param menu A string that is informative of what input is expected.
+   * @param menu         A string that is informative of what input is expected.
    * @param restrictions An ArrayList of strings to make unavailable.
    * @return Returns a string that usually indicates a name.
    */
-  private String stringInput(int minLength, String menu, ArrayList<String> restrictions) {
+  private String stringInput(String menu, ArrayList<String> restrictions) {
     String stringOut = "";
     boolean askAgain = true;
     while (askAgain) {
       printMenu(menu);
       try {
-        stringOut = input.inputString(minLength);
+        stringOut = input.inputString(2);
         if (!isRestricted(stringOut, restrictions)) {
           // I have used an exception to print what the user did wrong.
           // If I had more time I would make a standard solution.
@@ -535,7 +563,7 @@ public class UserInterfaceFlow {
    * @return boolean value based on user input.
    */
   private boolean booleanInput(String request) {
-    ArrayList<String> positive = new ArrayList<String>();
+    ArrayList<String> positive = new ArrayList<>();
     positive.add("true");
     positive.add("1");
     positive.add("yes");
@@ -552,7 +580,6 @@ public class UserInterfaceFlow {
         String finalStringInput = stringInput;
         output = positive.stream().anyMatch(m -> m.equalsIgnoreCase(finalStringInput));
         askAgain = false;
-        System.err.println(output);
       } catch (IllegalArgumentException e) {
         printUserInputError(e.getMessage());
       }
@@ -573,7 +600,7 @@ public class UserInterfaceFlow {
     boolean askAgain = true;
     while (askAgain) {
       String name = stringInput(2, "Ingredient name");
-      double quantity = doubleInput(0, 1_000_000, requestQuantity());
+      double quantity = doubleInput(requestQuantity());
       String unit = stringInput(1, "Ingredient unit");
       boolean allergies = booleanInput("Allergic");
       askAgain = booleanInput("More ingredients?");
