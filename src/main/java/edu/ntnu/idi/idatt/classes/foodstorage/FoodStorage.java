@@ -40,10 +40,15 @@ public class FoodStorage {
 
   public ArrayList<Groceries> getExpired() {
     update();
-    ArrayList<Groceries> expired = new ArrayList<Groceries>();
+    ArrayList<Groceries> expired = new ArrayList<>();
     for (Groceries g : storage) {
       if (g.hasExpired()) {
-        expired.add(g);
+        Groceries expiredGroceries = new Groceries(g.getGroceryName(),
+          g.getGroceryUnit(),
+          g.totalQuantity(),
+          g.getExpirationDate(),
+          g.getExpiredValue());
+        expired.add(expiredGroceries);
       }
     }
     return expired;

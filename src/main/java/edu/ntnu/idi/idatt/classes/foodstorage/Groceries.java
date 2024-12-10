@@ -1,9 +1,12 @@
 package edu.ntnu.idi.idatt.classes.foodstorage;
 
-import edu.ntnu.idi.idatt.ui.UserInterfaceFlow;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.translateToStandardUnits;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.unitToStandardUnit;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+
 
 /**
  * <h5>Class</h5>
@@ -35,10 +38,10 @@ public class Groceries {
                    LocalDate expirationDate,
                    double groceryPrice) {
     groceries = new ArrayList<>();
-    this.groceryName = groceryName;
-    this.groceryUnit = groceryUnit;
+    this.groceryName = groceryName.substring(0, 1).toUpperCase() + groceryName.substring(1);;
     this.groceryOldestDate = expirationDate;
-    this.totalQuantity += quantity;
+    this.totalQuantity += translateToStandardUnits(quantity, groceryUnit);
+    this.groceryUnit = unitToStandardUnit(groceryUnit);
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
 
@@ -117,6 +120,8 @@ public class Groceries {
     if (!groceryType.equalsIgnoreCase(groceryName)) {
       throw new IllegalArgumentException("New type of grocery should not be added to Groceries.");
     }
+    quantity = translateToStandardUnits(quantity, unit);
+    unit = unitToStandardUnit(unit);
     groceries.add(new Grocery(groceryType, unit, quantity, expiryDate, price));
     this.oldestDate();
   }
@@ -223,6 +228,17 @@ public class Groceries {
 
   /**
    * <h5>Method</h5>
+   * <h3>getExpirationDate()</h3>
+   * Get the date of the grocery that expires the soonest.
+   *
+   * @return LocalDate with the oldest grocery.
+   */
+  public LocalDate getExpirationDate() {
+    return this.groceryOldestDate;
+  }
+
+  /**
+   * <h5>Method</h5>
    * <h3>hasExpired()</h3>
    * Returns a boolean value to indicate if a grocery has expired.
    *
@@ -257,13 +273,11 @@ public class Groceries {
    * they make out my favourite java-stream-functions</i>
    *
    * @return A double that is the accumulative sum of all expired groceries.
-   *
-   * @see UserInterfaceFlow#valueOfExpiredGroceries()
    */
   public double getExpiredValue() {
     return getExpiredGroceries().stream()
-        .filter(grocery -> grocery.hasExpired())
-        .mapToDouble(grocery -> grocery.getPrice())
+        .filter(Grocery::hasExpired)
+        .mapToDouble(Grocery::getPrice)
         .sum();
   }
 
