@@ -33,7 +33,7 @@ public class UserInput {
    * @throws IllegalArgumentException Raises exception if invalid input.
    */
   public byte inputByte() throws IllegalArgumentException, InputMismatchException {
-    byte number = 0;
+    byte number;
 
     try {
       number = scanner.nextByte();
@@ -54,7 +54,7 @@ public class UserInput {
    * @throws IllegalArgumentException Raises exception if invalid input.
    */
   public int inputInt() throws IllegalArgumentException, InputMismatchException {
-    int number = 0;
+    int number;
 
     try {
       number = scanner.nextInt();
@@ -76,7 +76,7 @@ public class UserInput {
    * @throws InputMismatchException when user input is not a float.
    */
   public double inputDouble() throws InputMismatchException {
-    double number = 0;
+    double number;
 
     try {
       number = scanner.nextDouble();
@@ -134,7 +134,7 @@ public class UserInput {
   public LocalDate inputDate() throws IllegalArgumentException,
       InputMismatchException,
       DateTimeParseException {
-    String string = "";
+    String string;
     LocalDate localDate = null;
 
     try {

@@ -22,15 +22,6 @@ class FoodStorageTest {
   }
 
   @Test
-  void searchGroceries() {
-
-  }
-
-  @Test
-  void getStorage() {
-  }
-
-  @Test
   void defaultSizeIsOne() {
     assertEquals(foodStorage.getStorage().size(), 1);
   }

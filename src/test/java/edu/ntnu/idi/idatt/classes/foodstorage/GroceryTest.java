@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GroceryTest {
   Grocery grocery;
-  LocalDate standardDate = LocalDate.of(2020, 1, 1);
+  final LocalDate standardDate = LocalDate.of(2020, 1, 1);
 
   @BeforeEach
   void setUp() {
@@ -25,7 +25,7 @@ class GroceryTest {
   }
 
   @Test
-   void info() {
+  void info() {
     assertEquals("Normal 10.5 kg 2020-01-01 21.4 kr", grocery.info());
   }
 

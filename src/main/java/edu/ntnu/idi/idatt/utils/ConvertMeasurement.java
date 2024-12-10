@@ -1,13 +1,14 @@
 package edu.ntnu.idi.idatt.utils;
 
 /**
- * <h1>ConvertMeasurement</h1>
+ * <h5>Class</h5>
+ * <h3>ConvertMeasurement</h3>
  * Converts the most common measurements.
  * That includes:
  *  dL   -> L
  *  L    -> dL
- *  g    -> kg
  *  kg   -> g
+ *  g    -> kg
  *  tbsp -> kg
  *  tsp  -> kg
  */
@@ -16,7 +17,7 @@ public class ConvertMeasurement {
   // All field values are only meant for regex.
   private static final String gram = "[Gg]|[Gg]ram.";
   private static final String kilogram = "[Kk][Gg]|[Kk]ilogram.";
-  private final static String tablespoon = "[Tt][Bb][Ss][Pp]|[Tt]ablespoon.";
+  private static final String tablespoon = "[Tt][Bb][Ss][Pp]|[Tt]ablespoon.";
   private static final String teaspoon = "[Tt][Ss][Pp]|[Tt]easpoon.";
 
   private static final String milliliter = "[Mm][Ll]|[Mm]illiliter.";
@@ -36,7 +37,8 @@ public class ConvertMeasurement {
   }
 
   /**
-   * <h1>deciLiterToLiter</h1>
+   * <h5>Method</h5>
+   * <h3>deciliterToLiter()</h3>
    * This method converts from deciliter to liter.
    *
    * @param dl the amount to convert.
@@ -47,7 +49,8 @@ public class ConvertMeasurement {
   }
 
   /**
-   * <h1>literToDeciliter</h1>
+   * <h5>Method</h5>
+   * <h3>literToDeciliter()</h3>
    * This method converts from liter to deciliter.
    *
    * @param liter the amount to convert.
@@ -58,7 +61,8 @@ public class ConvertMeasurement {
   }
 
   /**
-   * <h1>gramToKilogram</h1>
+   * <h5>Method</h5>
+   * <h3>gramToKilogram()</h3>
    * This method converts from gram to kilogram.
    *
    * @param g the amount to convert.
@@ -68,20 +72,10 @@ public class ConvertMeasurement {
     return g / 1000;
   }
 
-  /**
-   * <h1>KilogramToGram</h1>
-   * This method converts from kg to gram.
-   *
-   * @param kg the amount to convert.
-   * @return the amount in liters.
-   */
-  public static double kilogramToGram(double kg) {
-    return kg * 1000;
-  }
 
   /**
    * <h5>Method</h5>
-   * <h3>teaspoonToKg</h3>
+   * <h3>teaspoonToKg()</h3>
    * This converts US-tablespoons to kg (because of SI-units).
    * Based on weight of water.
    *
@@ -94,7 +88,7 @@ public class ConvertMeasurement {
 
   /**
    * <h5>Method</h5>
-   * <h3>tablespoonToKg</h3>
+   * <h3>tablespoonToKg()</h3>
    * This converts teaspoons to kg (because of SI-units).
    * Based on weight of water.
    *

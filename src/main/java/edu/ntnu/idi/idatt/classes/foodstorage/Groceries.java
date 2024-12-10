@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.classes.foodstorage;
 
 import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.convertToStandardUnits;
 import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.unitToStandardUnit;
+import static edu.ntnu.idi.idatt.utils.Date.dateToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class Groceries {
   private final ArrayList<Grocery> groceries;
   private final String groceryName;
   private final String groceryUnit;
-  private double totalQuantity = 0;
   private LocalDate groceryOldestDate;
 
   /**
@@ -38,9 +38,8 @@ public class Groceries {
                    LocalDate expirationDate,
                    double groceryPrice) {
     groceries = new ArrayList<>();
-    this.groceryName = groceryName.substring(0, 1).toUpperCase() + groceryName.substring(1);;
+    this.groceryName = groceryName.substring(0, 1).toUpperCase() + groceryName.substring(1);
     this.groceryOldestDate = expirationDate;
-    this.totalQuantity += convertToStandardUnits(quantity, groceryUnit);
     this.groceryUnit = unitToStandardUnit(groceryUnit);
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
@@ -53,8 +52,6 @@ public class Groceries {
    * @return Nice string to be printed.
    */
   public String info() {
-    // Made partially by AI-prompt in ChatGPT.
-    // The take-away from the prompt was how to use substring and how to pad text.
     String name;
     if (groceryName.length() > 32) {
       name = groceryName.substring(0, 29) + "...";
@@ -85,7 +82,16 @@ public class Groceries {
       quantity = String.format("%-5s", groceryQuantityStr);
     }
 
-    String expiration = groceryOldestDate.toString();
+    String expiration;
+    if (hasExpired()) {
+      expiration = "\u001B[31m";
+      expiration += dateToString(groceryOldestDate);
+      expiration += "\u001B[0m";
+    } else {
+      expiration = "\u001B[32m";
+      expiration += dateToString(groceryOldestDate);
+      expiration += "\u001B[0m";
+    }
 
     return name + " | "  + quantity + " " + unit + " | " + price + " kr | " + expiration;
   }
@@ -141,7 +147,6 @@ public class Groceries {
 
     double quantityRemaining = quantity;
     for (Grocery g : groceries) {
-      System.err.println(g.info());
       if (quantityRemaining >= g.getQuantity()) {
 
         quantityRemaining -= g.getQuantity();
@@ -271,7 +276,7 @@ public class Groceries {
   public ArrayList<Grocery> getExpiredGroceries() {
     ArrayList<Grocery> expiredGroceries = new ArrayList<>();
     for (Grocery g : groceries) {
-      if (g.getExpiryDate().isBefore(LocalDate.now())) {
+      if (g.hasExpired()) {
         expiredGroceries.add(g);
       }
     }

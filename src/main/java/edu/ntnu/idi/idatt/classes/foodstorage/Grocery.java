@@ -1,21 +1,24 @@
 package edu.ntnu.idi.idatt.classes.foodstorage;
 
+import static edu.ntnu.idi.idatt.utils.Date.dateToString;
+
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 
+
 /**
+ * <h5>Class</h5>
+ * <h3>Grocery</h3>
  * This class is to be the lowest part of the system.
  * It is here that each grocery is defined.
+ * The role of this class is to be a blueprint
+ * of each item stored in the fridge.
+ * This class is responsible to have public information
+ * on the status of each grocery, that includes:
+ * what kind of grocery, the unit of measurement and expiry date.
  */
 public class Grocery {
 
-  /**
-  The role of this class is to be a blueprint
-  of each item stored in the fridge.
-  This class is responsible to have public information
-  on the status of each grocery, that includes:
-  what kind of grocery, the unit of measurement and expiry date.
-  */
   private final String groceryType;
   private final String unit;
   private final LocalDate expiryDate;
@@ -23,6 +26,8 @@ public class Grocery {
   private double quantity;
 
   /**
+   * <h5>Constructor</h5>
+   * <h3>Grocery</h3>
    * Constructor for the Grocery-class.
    * This is the lowest form of groceries,
    * where each grocery is defined, or more precisely, a batch of groceries.
@@ -48,10 +53,10 @@ public class Grocery {
 
   /**
    * <h5>Method</h5>
-   * <h3>updatePrice()</h3>
-   * Updates price after a certain amount is removed from the storage.
+   * <h3>info()</h3>
+   * Returns a nice and informative String about a Grocery.
    *
-   * @return String of info meant to be printed.
+   * @return String of info about Grocery meant to be printed.
    */
   public String info() {
     String name;
@@ -84,17 +89,22 @@ public class Grocery {
       quantityString = String.format("%-5s", groceryQuantityStr);
     }
 
-    String expiration = expiryDate.toString();
+    String expiration;
+    if (hasExpired()) {
+      expiration = "\u001B[31m";
+      expiration += dateToString(expiryDate);
+      expiration += "\u001B[0m";
+    } else {
+      expiration = "\u001B[32m";
+      expiration += dateToString(expiryDate);
+      expiration += "\u001B[0m";
+    }
 
-    return name + " | "  + quantityString + " " + unitString + " | " + priceString + " kr | " + expiration;
-  }
-/*
-    return this.groceryType + " "
-        + this.quantity + " "
-        + this.unit + " "
-        + this.expiryDate + " "
-        + this.price + " kr";
-
+    return name + " | "
+        + quantityString + " "
+        + unitString + " | "
+        + priceString + " kr | "
+        + expiration;
   }
 
   /**

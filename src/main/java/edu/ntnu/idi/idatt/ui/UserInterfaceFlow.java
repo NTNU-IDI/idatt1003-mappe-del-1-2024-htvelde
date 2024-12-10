@@ -1,9 +1,39 @@
 package edu.ntnu.idi.idatt.ui;
 
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.*;
-import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.*;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.newLine;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.print;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printArrayList;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printMenu;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printSuggestedRecipe;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printTotalValueOfGroceries;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printUserInputError;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.BLUE;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.CYAN;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.PURPLE;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.RED;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.RESET_COLOR;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.allGroceriesStringHeader;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.empty;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.expired;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.groceriesMenuText;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.mainMenuText;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.noSuggestions;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.procedure;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.recipesMenuText;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestGroceryType;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPortionRemoval;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestPrice;
-import static edu.ntnu.idi.idatt.ui.ValidateInput.*;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestQuantity;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestRecipeDescription;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestRecipeName;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestUnit;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.searchGroceryString;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.searchRecipeString;
+import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.welcome;
+import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidByte;
+import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidDouble;
+import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidInt;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.convertToStandardUnits;
 
 import edu.ntnu.idi.idatt.classes.foodstorage.FoodStorage;
 import edu.ntnu.idi.idatt.classes.foodstorage.Groceries;
@@ -13,7 +43,9 @@ import edu.ntnu.idi.idatt.classes.recipe.Ingredient;
 import edu.ntnu.idi.idatt.classes.recipe.Recipe;
 import edu.ntnu.idi.idatt.classes.recipe.SuggestedRecipes;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.OptionalDouble;
 
 /**
  * <h5>Class</h5>
@@ -37,7 +69,7 @@ public class UserInterfaceFlow {
     this.foodStorage = new FoodStorage();
     this.cookBook = new CookBook();
     this.input = new UserInput();
-    print(welcome());
+    print(welcome);
   }
 
   /**
@@ -63,7 +95,7 @@ public class UserInterfaceFlow {
    */
   public boolean mainMenu() {
     final byte max = 2;
-    byte userInput = byteInput(max, mainMenuText());
+    byte userInput = byteInput(max, mainMenuText);
     boolean repeat = true;
 
     switch (userInput) {
@@ -86,11 +118,11 @@ public class UserInterfaceFlow {
 
     boolean repeat = true;
     while (repeat) {
-      byte userInput = byteInput(max, groceriesMenuText());
+      byte userInput = byteInput(max, groceriesMenuText);
 
       switch (userInput) {
         case 1 -> addGrocery();
-        case 2 -> removeGrocery();
+        case 2 -> userRemoveGrocery();
         case 3 -> showAllGroceries();
         case 4 -> searchGrocery();
         case 5 -> searchExpirationDate();
@@ -107,11 +139,11 @@ public class UserInterfaceFlow {
    * Prints name of different recipes that you know.
    */
   public void recipesMenu() {
-    final byte max = 5;
+    final byte max = 6;
 
     boolean repeat = true;
     while (repeat) {
-      byte userInput = byteInput(max, recipesMenuText());
+      byte userInput = byteInput(max, recipesMenuText);
 
       switch (userInput) {
         case 1 -> addRecipe();
@@ -119,6 +151,7 @@ public class UserInterfaceFlow {
         case 3 -> viewRecipes();
         case 4 -> searchRecipe();
         case 5 -> suggestedRecipe();
+        case 6 -> useRecipe();
         default -> repeat = false;
       }
     }
@@ -133,14 +166,16 @@ public class UserInterfaceFlow {
     newLine();
 
     if (foodStorage.getStorage().isEmpty()) {
-      print(empty());
+      print(empty);
       return;
     }
 
     // Builds a string-block from the groceries in the food storage
     String searchOptions = searchGroceryString(foodStorage);
 
+    print(BLUE);
     print(searchOptions);
+    print(RESET_COLOR);
     String searchString = input.inputString(2);
 
     if (searchString.equalsIgnoreCase("exit")) {
@@ -166,16 +201,16 @@ public class UserInterfaceFlow {
    * But you are in luck, some delicious desert pancakes are included!
    */
   private void addRecipe() {
-    String name = stringInput(2, requestRecipeName());
+    String name = stringInput(2, requestRecipeName);
 
     ArrayList<Ingredient> ingredients = ingredientsInput();
 
-    String description = stringInput(2, requestRecipeDescription());
-    int portions = intInput(requestRecipePortionSize());
-    String procedure = stringInput(2, procedure());
+    String description = stringInput(2, requestRecipeDescription);
+    int portions = intInput();
+    String procedureString = stringInput(2, procedure);
 
-    Recipe recipe = new Recipe(name, description, ingredients, procedure, portions);
-    cookBook.addRecipes(recipe);
+    Recipe recipe = new Recipe(name, description, ingredients, procedureString, portions);
+    cookBook.addRecipe(recipe);
   }
 
   /**
@@ -185,9 +220,9 @@ public class UserInterfaceFlow {
    */
   private void removeRecipe() {
     viewRecipes();
-    String recipeName = stringInput(2, requestGroceryType());
+    String recipeName = stringInput(2, requestGroceryType);
 
-    int result = cookBook.searchRecipes(recipeName);
+    int result = cookBook.searchRecipesIndex(recipeName);
     if (result == -1) {
       return;
     }
@@ -204,7 +239,7 @@ public class UserInterfaceFlow {
    */
   private void viewRecipes() {
     if (cookBook.getRecipes().isEmpty()) {
-      print(empty());
+      print(empty);
       return;
     }
 
@@ -214,7 +249,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   *
    * <h5>Method</h5>
    * <h3>searchRecipes()</h3>
    * First a list of all recipes show up,
@@ -222,8 +256,10 @@ public class UserInterfaceFlow {
    * with name, ingredients, description.
    */
   private void searchRecipe() {
+    newLine();
+
     if (cookBook.getRecipes().isEmpty()) {
-      print(empty());
+      print(empty);
       return;
     }
 
@@ -236,7 +272,7 @@ public class UserInterfaceFlow {
       return;
     }
 
-    int searchResult = cookBook.searchRecipes(searchString.toLowerCase());
+    int searchResult = cookBook.searchRecipesIndex(searchString.toLowerCase());
     if (searchResult == -1) {
       searchRecipe();
     }
@@ -253,15 +289,15 @@ public class UserInterfaceFlow {
    */
   private void suggestedRecipe() {
     if (cookBook.getRecipes().isEmpty()) {
-      print(noSuggestions());
+      print(noSuggestions);
       return;
     }
     if (foodStorage.getStorage().isEmpty()) {
-      print(noSuggestions());
+      print(noSuggestions);
       return;
     }
     if (cookBook.getRecipes().size() >= foodStorage.getStorage().size()) {
-      print(noSuggestions());
+      print(noSuggestions);
       return;
     }
 
@@ -288,9 +324,6 @@ public class UserInterfaceFlow {
             .min();
 
         double portion = minPortions.orElse(0.0);
-
-        System.err.println("Sublist " + sublistOfRecipes.getFirst().getName());
-        System.err.println(portion);
       }
     }
 
@@ -300,6 +333,16 @@ public class UserInterfaceFlow {
       printSuggestedRecipe(suggestedRecipe.recipeInfo(), suggestedRecipe.getPortions());
     }
     print(RESET_COLOR);
+  }
+
+  private void useRecipe() {
+    String recipeName = stringInput(2, requestRecipeName);
+    double portions = doubleInput(requestPortionRemoval);
+
+    for (Ingredient ingredient : cookBook.searchRecipes(recipeName).getIngredients()) {
+      double portionToRemove = convertToStandardUnits(portions, ingredient.getUnit());
+      removeGrocery(ingredient.getName(), portionToRemove);
+    }
   }
 
   /**
@@ -314,14 +357,11 @@ public class UserInterfaceFlow {
     restrictions.add("exit");
 
     newLine();
-    String typeName = stringInput(requestGroceryType(), restrictions);
-    double quantity = doubleInput(requestQuantity());
-    String unit =
-        (foodStorage.searchGroceries(typeName) == -1)
-        ? stringInput(1, requestUnit())
-        : foodStorage.getUnit(typeName);
-    double price = doubleInput(requestPrice());
-    LocalDate date = dateInput(requestDate());
+    String typeName = stringInput(requestGroceryType, restrictions);
+    double quantity = doubleInput(requestQuantity);
+    String unit = stringInput(requestUnit, restrictions);
+    double price = doubleInput(requestPrice);
+    LocalDate date = dateInput();
 
     foodStorage.addToGroceries(typeName, unit, quantity, date, price);
 
@@ -330,23 +370,35 @@ public class UserInterfaceFlow {
 
   /**
    * <h5>Method</h5>
+   * <h3>userRemoveGrocery()</h3>
+   * Removes a grocery from foodStorage based on name and quantity.
+   * The user specifies which grocery to remove.
+   * Grocery deletes when more is removed than possible.
+   */
+  private void userRemoveGrocery() {
+    newLine();
+
+    String typeName = stringInput(2, requestGroceryType);
+    double quantity = doubleInput(requestQuantity);
+    String unit = stringInput(1, requestUnit);
+    quantity = convertToStandardUnits(quantity, unit);
+
+    removeGrocery(typeName, quantity);
+  }
+
+  /**
+   * <h5>Method</h5>
    * <h3>removeGrocery()</h3>
    * Removes a grocery from foodStorage based on name and quantity.
    * Grocery deletes when more is removed than possible.
    */
-  private void removeGrocery() {
-    newLine();
-
-    String typeName = stringInput(2, requestGroceryType());
-    double quantity = doubleInput(requestQuantity());
-
-    int result = foodStorage.searchGroceries(typeName);
+  private void removeGrocery(String groceryName, double quantity) {
+    int result = foodStorage.searchGroceries(groceryName);
     if (result == -1) {
       return;
     }
 
     foodStorage.getStorage().get(result).removeGrocery(quantity);
-    newLine();
   }
 
   /**
@@ -358,11 +410,11 @@ public class UserInterfaceFlow {
     newLine();
 
     if (foodStorage.getStorage().isEmpty()) {
-      print(empty());
+      print(empty);
       return;
     }
-    print(allGroceriesString());
-    printArrayList(foodStorage.getStorage());
+    print(allGroceriesStringHeader());
+    printArrayList(foodStorage.getStorage(), BLUE);
     newLine();
   }
 
@@ -377,9 +429,9 @@ public class UserInterfaceFlow {
     newLine();
 
     print(RED);
-    print(expired());
-    print(allGroceriesString());
-    printArrayList(foodStorage.getExpired());
+    print(expired);
+    print(allGroceriesStringHeader());
+    printArrayList(foodStorage.getExpired(), RED);
     showTotalValueOfGroceries(foodStorage.getExpired());
     print(RESET_COLOR);
     newLine();
@@ -396,16 +448,16 @@ public class UserInterfaceFlow {
     newLine();
 
     print(PURPLE);
-    print(expired());
-    print(allGroceriesString());
-    printArrayList(foodStorage.getExpired(searchDate));
+    print(expired);
+    print(allGroceriesStringHeader());
+    printArrayList(foodStorage.getExpired(searchDate), PURPLE);
     showTotalValueOfGroceries(foodStorage.getExpired(searchDate));
     print(RESET_COLOR);
     newLine();
   }
 
   private void searchExpirationDate() {
-    LocalDate searchDate = dateInput(requestDate());
+    LocalDate searchDate = dateInput();
     expiredGroceries(searchDate);
   }
 
@@ -429,7 +481,9 @@ public class UserInterfaceFlow {
    */
   private void showTotalValueOfGroceries() {
     newLine();
+    print(CYAN);
     printTotalValueOfGroceries(foodStorage.getStorage());
+    print(RESET_COLOR);
     newLine();
   }
 
@@ -472,15 +526,14 @@ public class UserInterfaceFlow {
    * then makes sure it is a valid int (a value between <b>0 and max</b>.
    * If it is not, it repeats itself until the user enters a valid int.
    *
-   * @param menu A string that is informative of what input is expected.
    * @return Returns a valid int.
    */
-  private int intInput(String menu) {
+  private int intInput() {
     int userInput = 0;
 
     boolean askAgain = true;
     while (askAgain) {
-      printMenu(menu);
+      printMenu(UserInterfaceTextSource.requestRecipePortionSize);
       try {
         userInput = input.inputInt();
         if (!isValidInt(1, 1_000_000_000, userInput)) {
@@ -636,7 +689,7 @@ public class UserInterfaceFlow {
     boolean askAgain = true;
     while (askAgain) {
       String name = stringInput(2, "Ingredient name");
-      double quantity = doubleInput(requestQuantity());
+      double quantity = doubleInput(requestQuantity);
       String unit = stringInput(1, "Ingredient unit");
       boolean allergies = booleanInput("Allergic");
       askAgain = booleanInput("More ingredients?");
@@ -668,15 +721,14 @@ public class UserInterfaceFlow {
    * Asks the user for a valid date.
    * Repeats until satisfied.
    *
-   * @param menu Informative string.
    * @return LocalDate of a given date.
    */
-  private LocalDate dateInput(String menu) {
+  private LocalDate dateInput() {
     LocalDate userInput = LocalDate.now();
 
     boolean askAgain = true;
     while (askAgain) {
-      printMenu(menu);
+      printMenu(UserInterfaceTextSource.requestDate);
       try {
         userInput = input.inputDate();
         askAgain = false;

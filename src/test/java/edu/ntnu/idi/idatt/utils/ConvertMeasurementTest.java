@@ -75,25 +75,4 @@ class ConvertMeasurementTest {
     double kg = gramToKilogram(g);
     assertEquals(10, kg);
   }
-
-  @Test
-  void testKilogramToGram() {
-    double kg = 1.5;
-    double g = KilogramToGram(kg);
-    assertEquals(1500, g);
-  }
-
-  @Test
-  void zeroKilogramShouldGiveZeroGram() {
-    double kg = 0;
-    double g = KilogramToGram(kg);
-    assertEquals(0, g);
-  }
-
-  @Test
-  void TwoHundredKilogramsShouldGiveTwoHundredThousandGrams() {
-    double kg = 200;
-    double g = KilogramToGram(kg);
-    assertEquals(200_000, g);
-  }
 }

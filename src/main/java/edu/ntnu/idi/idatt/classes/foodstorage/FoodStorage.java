@@ -17,7 +17,7 @@ import java.util.Optional;
  * and works as the interface between users and the groceries.
  */
 public class FoodStorage {
-  ArrayList<Groceries> storage = new ArrayList<>();
+  private final ArrayList<Groceries> storage = new ArrayList<>();
 
   /**
    * <h5>Constructor</h5>
@@ -33,37 +33,59 @@ public class FoodStorage {
     addToGroceries("Egg", "ea", 12, LocalDate.now().minusDays(5), 41.5);
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getStorage()</h3>
+   * Updates the storage before returning it.
+   *
+   * @return ArrayList of all stored groceries.
+   */
   public ArrayList<Groceries> getStorage() {
     update();
     return storage;
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getExpired()</h3>
+   * Gets all groceries that are expiring before today.
+   *
+   * @return ArrayList of the expired groceries.
+   */
   public ArrayList<Groceries> getExpired() {
     update();
     ArrayList<Groceries> expired = new ArrayList<>();
     for (Groceries g : storage) {
       if (g.hasExpired()) {
         Groceries expiredGroceries = new Groceries(g.getGroceryName(),
-          g.getGroceryUnit(),
-          g.totalQuantity(),
-          g.getExpirationDate(),
-          g.getExpiredValue());
+            g.getGroceryUnit(),
+            g.totalQuantity(),
+            g.getExpirationDate(),
+            g.getExpiredValue());
         expired.add(expiredGroceries);
       }
     }
     return expired;
   }
 
+  /**
+   * <h5>Method</h5>
+   * <h3>getExpired()</h3>
+   * Gets all groceries that are expiring before a given date.
+   *
+   * @param searchDate LocalDate of a date to check.
+   * @return ArrayList of the expired groceries.
+   */
   public ArrayList<Groceries> getExpired(LocalDate searchDate) {
     update();
     ArrayList<Groceries> expired = new ArrayList<>();
     for (Groceries g : storage) {
       if (g.hasExpired(searchDate)) {
         Groceries expiredGroceries = new Groceries(g.getGroceryName(),
-          g.getGroceryUnit(),
-          g.totalQuantity(),
-          g.getExpirationDate(),
-          g.getExpiredValue());
+            g.getGroceryUnit(),
+            g.totalQuantity(),
+            g.getExpirationDate(),
+            g.getExpiredValue());
         expired.add(expiredGroceries);
       }
     }
@@ -111,7 +133,7 @@ public class FoodStorage {
         .filter(grocery -> grocery.getGroceryName().equalsIgnoreCase(groceryName))
         .findFirst();
 
-    return searchResult.map(groceries -> storage.indexOf(groceries)).orElse(-1);
+    return searchResult.map(storage::indexOf).orElse(-1);
   }
 
   /**
@@ -121,7 +143,7 @@ public class FoodStorage {
    * Number indicating position in ArrayList.
    * Should only to be used directly after a search,
    * before any mutation occur, that can have impact.<br>
-   * <b>Use the overloaded method with String if unsure.</br>
+   * <b>Use the overloaded method with String if unsure.</b>
    *
    * @param groceryIndex Index of a grocery in ArrayList.
    * @return Unit String.
