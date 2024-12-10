@@ -3,7 +3,7 @@ package edu.ntnu.idi.idatt.ui;
 public class ValidateInput {
 
   public static boolean isValidByte(byte max, byte input) {
-    return input >= 1 && input <= max;
+    return input >= 0 && input <= max;
   }
 
   public static boolean isValidInt(int min, int max, int input) {

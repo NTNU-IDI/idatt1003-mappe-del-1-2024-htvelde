@@ -63,4 +63,8 @@ public class Ingredient {
   public String info() {
     return quantity + " " + unit + "\t" + name;
   }
+
+  public String info(double portions) {
+    return quantity*portions + " " + unit + "\t" + name;
+  }
 }

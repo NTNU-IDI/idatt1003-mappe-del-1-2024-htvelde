@@ -50,6 +50,12 @@ public class UserInterfacePrintOut {
     System.out.println("Total value is " + totalValueOfGroceries + " kr.");
   }
 
+  public static void printSuggestedRecipe(String recipeInfo, double portions) {
+    System.out.println(recipeInfo
+        + "\nThis recipe with the give ingredients can make " + portions + " portions.");
+    newLine();
+  }
+
   public static void printArrayList(ArrayList<Groceries> arrayList) {
     arrayList.forEach(m -> print(m.info()));
   }

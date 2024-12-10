@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.classes.foodstorage;
 
-import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.translateToStandardUnits;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.convertToStandardUnits;
 import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.unitToStandardUnit;
 
 import java.time.LocalDate;
@@ -40,7 +40,7 @@ public class Groceries {
     groceries = new ArrayList<>();
     this.groceryName = groceryName.substring(0, 1).toUpperCase() + groceryName.substring(1);;
     this.groceryOldestDate = expirationDate;
-    this.totalQuantity += translateToStandardUnits(quantity, groceryUnit);
+    this.totalQuantity += convertToStandardUnits(quantity, groceryUnit);
     this.groceryUnit = unitToStandardUnit(groceryUnit);
     this.addGrocery(groceryName, groceryUnit, quantity, expirationDate, groceryPrice);
   }
@@ -120,7 +120,7 @@ public class Groceries {
     if (!groceryType.equalsIgnoreCase(groceryName)) {
       throw new IllegalArgumentException("New type of grocery should not be added to Groceries.");
     }
-    quantity = translateToStandardUnits(quantity, unit);
+    quantity = convertToStandardUnits(quantity, unit);
     unit = unitToStandardUnit(unit);
     groceries.add(new Grocery(groceryType, unit, quantity, expiryDate, price));
     this.oldestDate();
@@ -246,6 +246,19 @@ public class Groceries {
    */
   public boolean hasExpired() {
     return groceryOldestDate.isBefore(LocalDate.now());
+  }
+
+  /**
+   * <h5>Method</h5>
+   * <h3>hasExpired(LocalDate searchDate)</h3>
+   * Returns a boolean value to indicate if a grocery has
+   * expired after a specified date.
+   *
+   * @param date Date to search expiration of groceries.
+   * @return Returns true if expired, else returns false.
+   */
+  public boolean hasExpired(LocalDate date) {
+    return groceryOldestDate.isBefore(date);
   }
 
   /**

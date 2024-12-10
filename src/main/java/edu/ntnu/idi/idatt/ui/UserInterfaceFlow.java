@@ -13,10 +13,7 @@ import edu.ntnu.idi.idatt.classes.recipe.Ingredient;
 import edu.ntnu.idi.idatt.classes.recipe.Recipe;
 import edu.ntnu.idi.idatt.classes.recipe.SuggestedRecipes;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.InputMismatchException;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <h5>Class</h5>
@@ -65,7 +62,7 @@ public class UserInterfaceFlow {
    * @return returns a boolean to indicate whether the function should repeat or not.
    */
   public boolean mainMenu() {
-    final byte max = 3;
+    final byte max = 2;
     byte userInput = byteInput(max, mainMenuText());
     boolean repeat = true;
 
@@ -96,8 +93,9 @@ public class UserInterfaceFlow {
         case 2 -> removeGrocery();
         case 3 -> showAllGroceries();
         case 4 -> searchGrocery();
-        case 5 -> expiredGroceries();
-        case 6 -> showTotalValueOfGroceries();
+        case 5 -> searchExpirationDate();
+        case 6 -> expiredGroceries();
+        case 7 -> showTotalValueOfGroceries();
         default -> repeat = false;
       }
     }
@@ -109,7 +107,7 @@ public class UserInterfaceFlow {
    * Prints name of different recipes that you know.
    */
   public void recipesMenu() {
-    final byte max = 6;
+    final byte max = 5;
 
     boolean repeat = true;
     while (repeat) {
@@ -254,40 +252,54 @@ public class UserInterfaceFlow {
    * <b><i>Mark that all ingredients must be spelled like its counterpart!</i></b>
    */
   private void suggestedRecipe() {
-    System.err.println("Suggested Recipe 1");
-    if (cookBook.getRecipes().isEmpty()
-        || foodStorage.getStorage().isEmpty()
-        || cookBook.getRecipes().size() < foodStorage.getStorage().size()) {
+    if (cookBook.getRecipes().isEmpty()) {
+      print(noSuggestions());
+      return;
+    }
+    if (foodStorage.getStorage().isEmpty()) {
+      print(noSuggestions());
+      return;
+    }
+    if (cookBook.getRecipes().size() >= foodStorage.getStorage().size()) {
       print(noSuggestions());
       return;
     }
 
-    System.err.println("Suggested Recipe 2");
-
     // Eliminate candidates that have not met the sublist condition.
+    // Disclaimer: I don't like to nest 3 loops,
+    // but I couldn't figure out a better way to omit them.
     ArrayList<SuggestedRecipes> sublistOfRecipes = new ArrayList<>();
     ArrayList<Groceries> apparentGroceries;
     for (Recipe recipe : cookBook.getRecipes()) {
       apparentGroceries = new ArrayList<>();
       for (Groceries grocery : foodStorage.getStorage()) {
-        if (recipe.getName().equalsIgnoreCase(grocery.getGroceryName())) {
-          apparentGroceries.add(grocery);
+        for (Ingredient ingredient : recipe.getIngredients()) {
+          if (ingredient.getName().equalsIgnoreCase(grocery.getGroceryName())) {
+            apparentGroceries.add(grocery);
+          }
         }
       }
-      if (!apparentGroceries.isEmpty()) {
+      if (apparentGroceries.size() >= recipe.getIngredients().size()) {
         sublistOfRecipes.add(new SuggestedRecipes(recipe, apparentGroceries));
+
+        // Eliminate all candidates with enough ingredients for less than 1 portion.
+        OptionalDouble minPortions = sublistOfRecipes.stream()
+            .mapToDouble(SuggestedRecipes::getPortions)
+            .min();
+
+        double portion = minPortions.orElse(0.0);
+
+        System.err.println("Sublist " + sublistOfRecipes.getFirst().getName());
+        System.err.println(portion);
       }
     }
 
-    System.err.println("Suggested Recipe 3");
-
-    // Eliminate all candidates with enough ingredients for less than 1 portion.
-    Optional<SuggestedRecipes> portions = sublistOfRecipes.stream()
-        .min(Comparator.comparing(SuggestedRecipes::getPortions));
-
-    System.err.println(portions);
-
-    // Also determine how many portions you could make.
+    // Determine how many portions you could make.
+    print(BLUE);
+    for (SuggestedRecipes suggestedRecipe : sublistOfRecipes) {
+      printSuggestedRecipe(suggestedRecipe.recipeInfo(), suggestedRecipe.getPortions());
+    }
+    print(RESET_COLOR);
   }
 
   /**
@@ -375,6 +387,30 @@ public class UserInterfaceFlow {
 
   /**
    * <h5>Method</h5>
+   * <h3>expiredGroceries()</h3>
+   * Prints all groceries that have expired.
+   * To ease development, all groceries of an expired type
+   * are shown, despite not necessarily being expired.
+   */
+  private void expiredGroceries(LocalDate searchDate) {
+    newLine();
+
+    print(PURPLE);
+    print(expired());
+    print(allGroceriesString());
+    printArrayList(foodStorage.getExpired(searchDate));
+    showTotalValueOfGroceries(foodStorage.getExpired(searchDate));
+    print(RESET_COLOR);
+    newLine();
+  }
+
+  private void searchExpirationDate() {
+    LocalDate searchDate = dateInput(requestDate());
+    expiredGroceries(searchDate);
+  }
+
+  /**
+   * <h5>Method</h5>
    * <h3>showTotalValueOfGroceries(ArrayList groceries)</h3>
    * Show total value of all groceries in an ArrayList.
    *
@@ -421,7 +457,7 @@ public class UserInterfaceFlow {
         }
         askAgain = false;
       } catch (IllegalArgumentException e) {
-        printUserInputError("Number not in valid range [1-" + max + "]");
+        printUserInputError("Number not in valid range [0-" + max + "]");
       } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
       }

@@ -1,43 +1,24 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
-import edu.ntnu.idi.idatt.classes.foodstorage.Groceries;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.*;
 
+import edu.ntnu.idi.idatt.classes.foodstorage.Groceries;
 import java.util.ArrayList;
 
-import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.*;
 
 public class SuggestedRecipes {
   Recipe recipe;
   ArrayList<Groceries> grocery;
+  String name;
 
   public SuggestedRecipes(Recipe recipe, ArrayList<Groceries> grocery) {
     this.recipe = recipe;
     this.grocery = grocery;
+    name = recipe.getName();
   }
 
-  private double translateToStandardUnits(double quantity, String unit) {
-    if (unit.matches("g|gram|grams")) {
-      return gramToKilogram(quantity);
-    }
-    if (unit.matches("kg|kilogram|kilograms")) {
-      return quantity;
-    }
-    if (unit.matches("[dD][lL]|desiliter|deciliter")) {
-      return deciliterToLiter(quantity);
-    }
-    if (unit.matches("L|l|liter|Liter|liters")) {
-      return quantity;
-    }
-    if (unit.matches("[mM]+|milliliter")) {
-      return milliliterToLiter(quantity);
-    }
-    if (unit.matches("[tT][bB][sS][pP]|tablespoon|Tablespoon")) {
-      return tablespoonToLiter(quantity);
-    }
-    if (unit.matches("[tT][sS][pP]|teaspoon|Teaspoon")) {
-      return teaspoonToLiter(quantity);
-    }
-    return quantity;
+  public String getName() {
+    return name;
   }
 
   public int getPortions() {
@@ -46,9 +27,9 @@ public class SuggestedRecipes {
     for (Groceries groceries : grocery) {
       for (Ingredient ingredient : recipe.getIngredients()) {
 
-        double portionsAvailable = translateToStandardUnits(groceries.totalQuantity(),
+        double portionsAvailable = convertToStandardUnits(groceries.totalQuantity(),
             groceries.getGroceryUnit())
-            / translateToStandardUnits(ingredient.getQuantity(),
+            / convertToStandardUnits(ingredient.getQuantity(),
             ingredient.getUnit());
 
         if (portionsAvailable < limitingFactor || limitingFactor == -1) {
@@ -61,7 +42,7 @@ public class SuggestedRecipes {
     return limitingFactor == -1 ? 0 : (int) limitingFactor;
   }
 
-  public String printRecipes() {
-    return "";
+  public String recipeInfo() {
+    return recipe.info(getPortions());
   }
 }

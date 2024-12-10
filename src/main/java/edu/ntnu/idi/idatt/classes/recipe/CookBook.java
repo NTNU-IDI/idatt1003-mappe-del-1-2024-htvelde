@@ -1,13 +1,14 @@
 package edu.ntnu.idi.idatt.classes.recipe;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class CookBook {
-  private final ArrayList<Recipe> recipes =  new ArrayList<Recipe>();
+  private final ArrayList<Recipe> recipes =  new ArrayList<>();
 
   public CookBook() {
-    ArrayList<Ingredient> pancakeIngredients = new ArrayList<Ingredient>();
+    ArrayList<Ingredient> pancakeIngredients = new ArrayList<>();
     pancakeIngredients.add(new Ingredient("flour", 3, "dL", true));
     pancakeIngredients.add(new Ingredient("salt", 0.5, "tsp", false));
     pancakeIngredients.add(new Ingredient("milk", 0.5, "dL", true));
@@ -19,6 +20,15 @@ public class CookBook {
         pancakeIngredients,
         "Mix all, then fry.",
         4));
+
+    ArrayList<Ingredient> simpleIngredients = new ArrayList<>();
+    simpleIngredients.add(new Ingredient("Flour", 0.1, "tsp", false));
+    simpleIngredients.add(new Ingredient("Milk", 0.1, "dL", true));
+    recipes.add(new Recipe("Simple",
+        "super simple",
+        simpleIngredients,
+        "Mix all",
+        1));
   }
 
   public ArrayList<Recipe> getRecipes() {
@@ -27,6 +37,7 @@ public class CookBook {
 
   public void addRecipes(Recipe recipe) {
     recipes.add(recipe);
+    sortRecipes();
   }
 
   public void removeRecipe(Recipe recipe) {
@@ -39,5 +50,9 @@ public class CookBook {
         .findFirst();
 
     return searchResult.map(recipes::indexOf).orElse(-1);
+  }
+
+  private void sortRecipes() {
+    recipes.sort(Comparator.comparing(Recipe::getName));
   }
 }

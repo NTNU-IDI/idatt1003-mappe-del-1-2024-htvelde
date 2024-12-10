@@ -9,8 +9,8 @@ public class UserInterfaceTextSource {
   public static final String RED = "\u001B[31m";
   public static final String GREEN = "\u001B[32m";
   // private static final String YELLOW = "\u001B[33m";
-  // private static final String BLUE = "\u001B[34m";
-  // private static final String PURPLE = "\u001B[35m";
+  public static final String BLUE = "\u001B[34m";
+  public static final String PURPLE = "\u001B[35m";
   private static final String CYAN = "\u001B[36m";
   // private static final String WHITE = "\u001B[37m";
 
@@ -34,7 +34,7 @@ public class UserInterfaceTextSource {
     return """
       [1] Access the food storage
       [2] Access recipes
-      [3] Exit\r
+      [0] Exit\r
       """;
   }
 
@@ -44,9 +44,10 @@ public class UserInterfaceTextSource {
       [2] Remove grocery
       [3] View all stored groceries
       [4] Search grocery
-      [5] View expired groceries
-      [6] Get total value of food storage
-      [7] Exit to main menu\r
+      [5] Search expiration date for groceries
+      [6] View expired groceries
+      [7] Get total value of food storage
+      [0] Exit to main menu\r
       """;
   }
 
@@ -61,7 +62,7 @@ public class UserInterfaceTextSource {
       [3] View all recipes
       [4] Search for a recipe
       [5] View suggested recipes
-      [6] Exit to main menu\r
+      [0] Exit to main menu\r
       """;
   }
 

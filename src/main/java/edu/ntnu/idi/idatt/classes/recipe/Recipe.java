@@ -28,11 +28,27 @@ public class Recipe {
         + description + "\n";
   }
 
+  public String info(double portionsCount) {
+    return name + "\n"
+        + "Made for " + portions + " people\n"
+        + ingredientsOut(portionsCount) + "\n\t"
+        + description + "\n";
+  }
+
   private String ingredientsOut() {
     StringBuilder out = new StringBuilder();
     out.append("Ingredients:\n");
     for (Ingredient i : ingredients) {
       out.append("-\t").append(i.info()).append("\n");
+    }
+    return out.toString();
+  }
+
+  private String ingredientsOut(double portionsCount) {
+    StringBuilder out = new StringBuilder();
+    out.append("Ingredients:\n");
+    for (Ingredient i : ingredients) {
+      out.append("-\t").append(i.info(portionsCount)).append("\n");
     }
     return out.toString();
   }

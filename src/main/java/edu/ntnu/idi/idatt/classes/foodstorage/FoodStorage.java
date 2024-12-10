@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.classes.foodstorage;
 
-import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.translateToStandardUnits;
+import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.convertToStandardUnits;
 import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.unitToStandardUnit;
 
 import java.time.LocalDate;
@@ -54,6 +54,22 @@ public class FoodStorage {
     return expired;
   }
 
+  public ArrayList<Groceries> getExpired(LocalDate searchDate) {
+    update();
+    ArrayList<Groceries> expired = new ArrayList<>();
+    for (Groceries g : storage) {
+      if (g.hasExpired(searchDate)) {
+        Groceries expiredGroceries = new Groceries(g.getGroceryName(),
+          g.getGroceryUnit(),
+          g.totalQuantity(),
+          g.getExpirationDate(),
+          g.getExpiredValue());
+        expired.add(expiredGroceries);
+      }
+    }
+    return expired;
+  }
+
   /**
    * <h5>Method</h5>
    * <h3>addToGroceries()</h3>
@@ -71,7 +87,7 @@ public class FoodStorage {
                               double quantity,
                               LocalDate date,
                               double price) {
-    quantity = translateToStandardUnits(quantity, unit);
+    quantity = convertToStandardUnits(quantity, unit);
     unit = unitToStandardUnit(unit);
     int index = searchGroceries(groceryType);
     if (index == -1) {
