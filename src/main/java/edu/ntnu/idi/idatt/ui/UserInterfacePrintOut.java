@@ -22,11 +22,10 @@ public class UserInterfacePrintOut {
   /**
    * <h5>Method</h5>
    * <h3>printMenu()</h3>
-   * Prints a given menu String, followed by prompt.
+   * Prints a given menu String.
    */
   public static void printMenu(String menu) {
     System.out.println(menu);
-    prompt();
   }
 
 

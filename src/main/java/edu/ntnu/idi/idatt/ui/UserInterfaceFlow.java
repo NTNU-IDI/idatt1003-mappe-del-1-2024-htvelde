@@ -1,12 +1,6 @@
 package edu.ntnu.idi.idatt.ui;
 
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.newLine;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.print;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printArrayList;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printMenu;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printSuggestedRecipe;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printTotalValueOfGroceries;
-import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.printUserInputError;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.*;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.BLUE;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.CYAN;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.PURPLE;
@@ -45,7 +39,6 @@ import edu.ntnu.idi.idatt.classes.recipe.SuggestedRecipes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.OptionalDouble;
 
 /**
  * <h5>Class</h5>
@@ -55,25 +48,53 @@ import java.util.OptionalDouble;
  * and by extension, most methods appear here.
  */
 public class UserInterfaceFlow {
-  FoodStorage foodStorage;
-  CookBook cookBook;
-  UserInput input;
+  private FoodStorage foodStorage;
+  private CookBook cookBook;
+  private UserInput input;
 
   /**
-   * <h5>Method</h5>
+   * <h3>setCookBook()</h3>
+   * Sets the input-field to an instance of FoodStorage class.
+   *
+   * @param foodStorage FoodStorage that stores groceries.
+   */
+  private void setFoodStorage(FoodStorage foodStorage) {
+    this.foodStorage = foodStorage;
+  }
+
+  /**
+   * <h3>setCookBook()</h3>
+   * Sets the input-field to an instance of CookBook class.
+   *
+   * @param cookBook CookBook that stores recipes.
+   */
+  private void setCookBook(CookBook cookBook) {
+    this.cookBook = cookBook;
+  }
+
+  /**
+   * <h3>setInput()</h3>
+   * Sets the input-field to an instance of UserInput class.
+   *
+   * @param input UserInput takes input from user.
+   */
+  private void setInput(UserInput input) {
+    this.input = input;
+  }
+
+  /**
    * <h3>init()</h3>
    * Initialize the UI with a FoodStorage to handle all user input.
    */
   public void init() {
     // Initialize the FoodStorage-class, and the other UI-classes
-    this.foodStorage = new FoodStorage();
-    this.cookBook = new CookBook();
-    this.input = new UserInput();
+    setFoodStorage(new FoodStorage());
+    setCookBook(new CookBook());
+    setInput(new UserInput());
     print(welcome);
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>start()</h3>
    * Initiates the menu that repeats and controls until the user is satisfied.
    */
@@ -85,8 +106,7 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
-   * <h3>Main Menu()</h3>
+   * <h3>MainMenu()</h3>
    * The mainMenu dictates the flow of the program with user input.
    * All inputs are required to be bytes.
    * It is meant to repeat until user wants to exit, which is indicated with a boolean.
@@ -108,10 +128,11 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>groceriesMenu()</h3>
    * Creates a menu for the actions for groceries.
-   * Each input are bytes.
+   * Each input are bytes.<br>
+   * The method differs from main menu,
+   * by having the loop locally.
    */
   public void groceriesMenu() {
     final byte max = 7;
@@ -134,9 +155,10 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>recipesMenu()</h3>
-   * Prints name of different recipes that you know.
+   * Prints name of different recipes that you know.<br>
+   * The method differs from main menu,
+   * by having the loop locally.
    */
   public void recipesMenu() {
     final byte max = 6;
@@ -158,9 +180,8 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>searchGrocery()</h3>
-   * Prints all the groceries of a user-specified type.
+   * Searches and prints all groceries the user can search for.
    */
   public void searchGrocery() {
     newLine();
@@ -195,10 +216,9 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>addRecipe()</h3>
-   * Recipes aren't made by themselves, someone must be making them.
-   * But you are in luck, some delicious desert pancakes are included!
+   * Recipes aren't made by themselves, someone must make them.
+   * But you are in luck, some delicious <i>desert pancakes</i> are included!
    */
   private void addRecipe() {
     String name = stringInput(2, requestRecipeName);
@@ -214,7 +234,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>removeRecipe()</h3>
    * Removes a recipe by asking for the name of recipe to remove.
    */
@@ -231,11 +250,8 @@ public class UserInterfaceFlow {
   }
 
   /**
-   *
-   * <h5>Method</h5>
    * <h3>viewRecipes()</h3>
-   * Gives a list of all the stored recipes' names.
-   * You must search for a recipe to show what it contains.
+   * Prints a list of all searchable recipes' names.
    */
   private void viewRecipes() {
     if (cookBook.getRecipes().isEmpty()) {
@@ -243,17 +259,14 @@ public class UserInterfaceFlow {
       return;
     }
 
-    for (Recipe recipe : cookBook.getRecipes()) {
-      print(recipe.getName());
-    }
+    cookBook.getRecipes().forEach(recipe -> print(recipe.getName()));
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>searchRecipes()</h3>
-   * First a list of all recipes show up,
-   * then you enter in one of the names to get the complete recipe,
-   * with name, ingredients, description.
+   * Searches for a recipe.
+   * User enters a string that is the name of a recipe.
+   * If found, the recipe is printed.
    */
   private void searchRecipe() {
     newLine();
@@ -272,7 +285,7 @@ public class UserInterfaceFlow {
       return;
     }
 
-    int searchResult = cookBook.searchRecipesIndex(searchString.toLowerCase());
+    int searchResult = cookBook.searchRecipesIndex(searchString);
     if (searchResult == -1) {
       searchRecipe();
     }
@@ -281,22 +294,15 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>suggestedRecipe()</h3>
    * Shows the names of all recipes that you can make. The method is not case sensitive.<br>
    *
    * <b><i>Mark that all ingredients must be spelled like its counterpart!</i></b>
    */
   private void suggestedRecipe() {
-    if (cookBook.getRecipes().isEmpty()) {
-      print(noSuggestions);
-      return;
-    }
-    if (foodStorage.getStorage().isEmpty()) {
-      print(noSuggestions);
-      return;
-    }
-    if (cookBook.getRecipes().size() >= foodStorage.getStorage().size()) {
+    if (cookBook.getRecipes().isEmpty()
+        || foodStorage.getStorage().isEmpty()
+        || cookBook.getRecipes().size() >= foodStorage.getStorage().size()) {
       print(noSuggestions);
       return;
     }
@@ -315,15 +321,12 @@ public class UserInterfaceFlow {
           }
         }
       }
+
       if (apparentGroceries.size() >= recipe.getIngredients().size()) {
-        sublistOfRecipes.add(new SuggestedRecipes(recipe, apparentGroceries));
-
-        // Eliminate all candidates with enough ingredients for less than 1 portion.
-        OptionalDouble minPortions = sublistOfRecipes.stream()
-            .mapToDouble(SuggestedRecipes::getPortions)
-            .min();
-
-        double portion = minPortions.orElse(0.0);
+        SuggestedRecipes suggestion = new SuggestedRecipes(recipe, apparentGroceries);
+        if (suggestion.getPortions() >= 1) {
+          sublistOfRecipes.add(suggestion);
+        }
       }
     }
 
@@ -347,7 +350,6 @@ public class UserInterfaceFlow {
 
   /**
    *
-   * <h5>Method</h5>
    * <h3>addGrocery()</h3>
    * User inputs details on a grocery to add it to the storage.
    * A suggestion is to keep all names singular, to avoid duplicates.
@@ -369,7 +371,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>userRemoveGrocery()</h3>
    * Removes a grocery from foodStorage based on name and quantity.
    * The user specifies which grocery to remove.
@@ -387,7 +388,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>removeGrocery()</h3>
    * Removes a grocery from foodStorage based on name and quantity.
    * Grocery deletes when more is removed than possible.
@@ -402,7 +402,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>showAllGroceries()</h3>
    * Prints a nice overview of what is in the foodStorage.
    */
@@ -419,7 +418,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>expiredGroceries()</h3>
    * Prints all groceries that have expired.
    * To ease development, all groceries of an expired type
@@ -438,7 +436,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>expiredGroceries()</h3>
    * Prints all groceries that have expired.
    * To ease development, all groceries of an expired type
@@ -462,7 +459,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>showTotalValueOfGroceries(ArrayList groceries)</h3>
    * Show total value of all groceries in an ArrayList.
    *
@@ -475,7 +471,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>showTotalValueOfGroceries()</h3>
    * Show total value of all groceries stored in the food storage.
    */
@@ -488,7 +483,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>byteInput()</h3>
    * This is a function that asks for the user to input a byte,
    * then makes sure it is a valid byte (a value between <b>0 and max</b>.
@@ -520,7 +514,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>intInput()</h3>
    * This is a function that asks for the user to input an int,
    * then makes sure it is a valid int (a value between <b>0 and max</b>.
@@ -550,10 +543,9 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
-   * <h3>doubleInput()</h3>
-   * This is a function that asks for the user to input a double,
-   * then makes sure it is a valid double (a value between <b>min and max</b>.
+   * <h3>doubleInput(String menu)</h3>
+   * Method asks for the user to input a double,
+   * then makes sure it is a valid double (a value between <b>0 and 1_000_000_000</b>.
    * If it is not, it repeats itself until the user enters a valid double.<br>
    * <b><i>Notice that the decimal point is "," and not ".".</i></b>
    *
@@ -574,7 +566,7 @@ public class UserInterfaceFlow {
         askAgain = false;
       } catch (IllegalArgumentException e) {
         printUserInputError("Number not in valid range ["
-            + (double) 0 + "-" + (double) 1000000
+            + (double) 0 + "-" + (double) 1_000_000_000
             + "]");
       } catch (InputMismatchException e) {
         printUserInputError("Not a valid number");
@@ -584,7 +576,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>stringInput() - part 1</h3>
    * This is a function that asks for the user to a string,
    * then makes sure it is valid.
@@ -610,8 +601,7 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
-   * <h3>stringInput() - part 2 (restrictions)</h3>
+   * <h3>stringInput() w. (restrictions)</h3>
    * This is a function that asks for the user to input a double,
    * then makes sure it is a valid double (a value between <b>min and max</b>.
    * If it is not, it repeats itself until the user enters a valid double.<br>
@@ -627,7 +617,7 @@ public class UserInterfaceFlow {
     while (askAgain) {
       printMenu(menu);
       try {
-        stringOut = input.inputString(2);
+        stringOut = input.inputString(1);
         if (!isRestricted(stringOut, restrictions)) {
           // I have used an exception to print what the user did wrong.
           // If I had more time I would make a standard solution.
@@ -642,7 +632,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>booleanInput()</h3>
    * Requests the user to input something that is either positive or negative.
    * If the user is not positive,
@@ -677,7 +666,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>ingredientsInput()</h3>
    * This method asks for all details of the ingredients (name, quantity, unit, allergies).
    * It will continue until the user are content with the ingredients in a recipe.
@@ -701,7 +689,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>isRestricted()</h3>
    * Checks if an inputted word is in the restricted array,
    * and if so, returns true.
@@ -716,7 +703,6 @@ public class UserInterfaceFlow {
   }
 
   /**
-   * <h5>Method</h5>
    * <h3>dateInput()</h3>
    * Asks the user for a valid date.
    * Repeats until satisfied.

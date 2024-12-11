@@ -186,7 +186,6 @@ public class Grocery {
   private void updatePrice(double quantityRemoved) {
     if (quantityRemoved > 0) {
       double percentageRemoved = quantityRemoved / quantity;
-      System.err.println(percentageRemoved);
       this.price = this.price * (1 - percentageRemoved);
     }
   }

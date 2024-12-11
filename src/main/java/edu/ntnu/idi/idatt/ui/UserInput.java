@@ -1,5 +1,7 @@
 package edu.ntnu.idi.idatt.ui;
 
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.newLine;
+import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.prompt;
 import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
 
 import java.time.LocalDate;
@@ -36,7 +38,9 @@ public class UserInput {
     byte number;
 
     try {
+      prompt();
       number = scanner.nextByte();
+      newLine();
     } catch (InputMismatchException e) {
       scanner.next();
       throw new InputMismatchException();
@@ -57,7 +61,9 @@ public class UserInput {
     int number;
 
     try {
+      prompt();
       number = scanner.nextInt();
+      newLine();
     } catch (InputMismatchException e) {
       scanner.next();
       throw new InputMismatchException();
@@ -79,7 +85,9 @@ public class UserInput {
     double number;
 
     try {
+      prompt();
       number = scanner.nextDouble();
+      newLine();
     } catch (InputMismatchException e) {
       scanner.next();
       throw new InputMismatchException();
@@ -103,7 +111,9 @@ public class UserInput {
     String string;
 
     try {
+      prompt();
       string = scanner.next();
+      newLine();
       if (string.length() < minLength) {
         throw new IllegalArgumentException(
             "Too short input. It must be at least " + minLength + " characters."
@@ -138,7 +148,9 @@ public class UserInput {
     LocalDate localDate = null;
 
     try {
+      prompt();
       string = scanner.next();
+      newLine();
       // Regex I made on my own after an introduction to logical Regex.
       // It does not know how long any months are
       // An easy solution would be to have four checks dependent on month,
