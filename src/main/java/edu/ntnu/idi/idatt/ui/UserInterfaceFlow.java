@@ -88,7 +88,7 @@ public class UserInterfaceFlow {
    */
   public void init() {
     // Initialize the FoodStorage-class, and the other UI-classes
-    setFoodStorage(new FoodStorage());
+    setFoodStorage(new FoodStorage(true));
     setCookBook(new CookBook());
     setInput(new UserInput());
     print(welcome);

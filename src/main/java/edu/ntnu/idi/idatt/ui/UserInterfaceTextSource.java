@@ -145,14 +145,14 @@ public class UserInterfaceTextSource {
     String name = String.format("%-32s", "Item name");
     String unit = String.format("%-3s", "Unit");
     String price = String.format("%-7s", "Price");
-    String quantity = String.format("%-5s", "Qty.");
+    String quantity = String.format("%-7s", "Qty.");
     String expiration = "Expiration date";
 
     String header = name + " | "  + quantity + unit + " | " + price + " kr | " + expiration + "\n";
 
     // In-the-moment trick to not surpass the col:100-rule
     String firstPart = "-".repeat(33) + "+";
-    String secondPart = "-".repeat(11) + "+";
+    String secondPart = "-".repeat(13) + "+";
     String thirdPart = "-".repeat(12) + "+";
     String lastPart = "-".repeat(17);
     return header + firstPart + secondPart + thirdPart + lastPart;
