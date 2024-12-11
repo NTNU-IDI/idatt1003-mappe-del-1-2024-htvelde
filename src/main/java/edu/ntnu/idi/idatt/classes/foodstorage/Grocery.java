@@ -61,7 +61,7 @@ public class Grocery {
   public String info() {
     String name;
     if (groceryType.length() > 32) {
-      name = groceryType.substring(0, 29) + "...";
+      name = groceryType;
     } else {
       name = String.format("%-32s", groceryType);
     }
