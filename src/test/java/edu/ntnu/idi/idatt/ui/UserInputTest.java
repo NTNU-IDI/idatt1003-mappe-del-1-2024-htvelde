@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import static edu.ntnu.idi.idatt.utils.Date.dateToString;
-import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
 import static org.junit.jupiter.api.Assertions.*;
 class UserInputTest {
   UserInput userInput;
