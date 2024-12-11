@@ -35,7 +35,7 @@ public class CookBook {
     simpleIngredients.add(new Ingredient("Flour", 0.1, "tsp", false));
     simpleIngredients.add(new Ingredient("Milk", 0.1, "dL", true));
     recipes.add(new Recipe("Simple",
-        "super simple",
+        "Just to show that recipes can be used!",
         simpleIngredients,
         "Mix all",
         1));
@@ -97,11 +97,10 @@ public class CookBook {
    * <h5>Method</h5>
    * <h3>searchRecipesIndex()</h3>
    * Searches for recipe with a given name.
-   * Returns index. Should be careful not to mutate list
-   * between searching and using the index.
+   * Returns the object.
    *
    * @param searchString Name to search for.
-   * @return Index for the recipe or -1.
+   * @return Recipe object for the recipe or -1.
    */
   public Recipe searchRecipes(String searchString) {
     Optional<Recipe> out = recipes.stream()
