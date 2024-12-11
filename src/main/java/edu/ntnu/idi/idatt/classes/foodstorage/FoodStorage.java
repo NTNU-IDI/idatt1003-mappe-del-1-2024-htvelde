@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 
 /**
@@ -17,7 +18,17 @@ import java.util.Optional;
  * and works as the interface between users and the groceries.
  */
 public class FoodStorage {
-  private final ArrayList<Groceries> storage = new ArrayList<>();
+  private ArrayList<Groceries> storage;
+
+  /**
+   * <h3>setStorage()</h3>
+   * Sets the storage to given ArrayList of Groceries.
+   *
+   * @param storage A storage to work on.
+   */
+  private void setStorage(ArrayList<Groceries> storage) {
+    this.storage = storage;
+  }
 
   /**
    * <h5>Constructor</h5>
@@ -25,6 +36,22 @@ public class FoodStorage {
    * Initialize the food storage with some milk.
    */
   public FoodStorage() {
+    setStorage(new ArrayList<>());
+  }
+
+  /**
+   * <h5>Constructor</h5>
+   * <h3>FoodStorage</h3>
+   * Initialize the food storage with some milk.
+   */
+  public FoodStorage(boolean preFilled) {
+    setStorage(new ArrayList<>());
+    if (preFilled) {
+      preFill();
+    }
+  }
+
+  public void preFill() {
     addToGroceries("Milk", "L", 1, LocalDate.now(), 21.5);
     addToGroceries("Milk", "L", 1, LocalDate.now().minusDays(1), 21.5);
     addToGroceries("Flour", "kg", 4, LocalDate.now().plusYears(2), 24.2);
@@ -187,6 +214,8 @@ public class FoodStorage {
    * <h5>Method</h5>
    * <h3>sortStorage()</h3>
    * Mutates object to sort every grocery by name.
+   * 
+   * @see ArrayList#sort(Comparator) 
    */
   private void sortStorage() {
     storage.sort(Comparator.comparing(Groceries::getGroceryName));
@@ -196,6 +225,8 @@ public class FoodStorage {
    * <h5>Method</h5>
    * <h3>removeEmptyGroceries()</h3>
    * Runs through all items stored, and removes the ones without items.
+   * 
+   * @see ArrayList#removeIf(Predicate)
    */
   private void removeEmptyGroceries() {
     storage.removeIf(Groceries::isEmpty);
@@ -205,6 +236,8 @@ public class FoodStorage {
    * <h5>Method</h5>
    * <h3>updateDate()</h3>
    * Updates the expiration date of a stored grocery, to the soonest expiration.
+   *
+   * @see Groceries#oldestDate()
    */
   private void updateDate() {
     for (Groceries g : storage) {
