@@ -11,14 +11,6 @@ class UserInterfaceFlowTest {
   UserInterfaceFlow flow;
 
   @Test
-  void init() {
-  }
-
-  @Test
-  void start() {
-  }
-
-  @Test
   void testMainMenuWhenInputIsZero() {
     flow = new UserInterfaceFlow();
     ByteArrayInputStream inputStream = new ByteArrayInputStream("0".getBytes());
