@@ -7,6 +7,7 @@ import static edu.ntnu.idi.idatt.utils.Date.stringToDate;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
@@ -22,7 +23,15 @@ import java.util.Scanner;
  * @see Scanner
  */
 public class UserInput {
-  private final Scanner scanner = new Scanner(System.in).useDelimiter("\n");
+  private final Scanner scanner;
+
+  public UserInput() {
+    scanner = new Scanner(System.in).useDelimiter("\n");
+  }
+
+  public UserInput(Scanner scanner) {
+    this.scanner = scanner;
+  }
 
   /**
    * <h5>Method</h5>
@@ -143,7 +152,9 @@ public class UserInput {
    */
   public LocalDate inputDate() throws IllegalArgumentException,
       InputMismatchException,
-      DateTimeParseException {
+      DateTimeParseException,
+      NoSuchElementException
+  {
     String string;
     LocalDate localDate = null;
 
@@ -162,7 +173,7 @@ public class UserInput {
       localDate = stringToDate(string);
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Please enter a date on the format dd.MM.yyyy.");
-    } catch (InputMismatchException e) {
+    } catch (NoSuchElementException e) {
       scanner.next();
       throw new InputMismatchException("Please enter a valid string.");
     } catch (DateTimeParseException e) {
