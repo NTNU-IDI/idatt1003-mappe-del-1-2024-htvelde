@@ -222,10 +222,8 @@ public class UserInterfaceFlow {
    */
   private void addRecipe() {
     String name = stringInput(2, requestRecipeName);
-
-    ArrayList<Ingredient> ingredients = ingredientsInput();
-
     String description = stringInput(2, requestRecipeDescription);
+    ArrayList<Ingredient> ingredients = ingredientsInput();
     int portions = intInput();
     String procedureString = stringInput(2, procedure);
 

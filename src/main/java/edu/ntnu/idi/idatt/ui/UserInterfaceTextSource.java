@@ -53,7 +53,7 @@ public class UserInterfaceTextSource {
         + CYAN + "PRICE" + RESET_COLOR + " of the product";
     requestRecipeName = "Enter the "
         + CYAN + "NAME" + RESET_COLOR + " of the recipe";
-    requestRecipeDescription = "Enter the "
+    requestRecipeDescription = "Enter a nice and short "
         + CYAN + "DESCRIPTION" + RESET_COLOR + " of your recipe";
     requestRecipePortionSize = "Enter the number of "
         + CYAN + "PORTIONS" + RESET_COLOR + " this recipe makes";
