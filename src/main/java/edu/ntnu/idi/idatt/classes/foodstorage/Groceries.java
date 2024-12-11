@@ -76,10 +76,10 @@ public class Groceries {
 
     String quantity;
     String groceryQuantityStr = String.format("%.2f", totalQuantity());
-    if (groceryQuantityStr.length() > 5) {
-      quantity = groceryQuantityStr.substring(0, 2) + "...";
+    if (groceryQuantityStr.length() > 6) {
+      quantity = groceryQuantityStr.substring(0, 5) + "..";
     } else {
-      quantity = String.format("%-5s", groceryQuantityStr);
+      quantity = String.format("%-7s", groceryQuantityStr);
     }
 
     String expiration;
