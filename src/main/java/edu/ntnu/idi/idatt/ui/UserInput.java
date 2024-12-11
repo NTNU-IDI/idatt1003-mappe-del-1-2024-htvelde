@@ -1,5 +1,7 @@
 package edu.ntnu.idi.idatt.ui;
 
+import edu.ntnu.idi.idatt.utils.ValidateInput;
+
 import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.newLine;
 import static edu.ntnu.idi.idatt.ui.UserInterfacePrintOut.prompt;
 import static edu.ntnu.idi.idatt.utils.Date.stringToDate;

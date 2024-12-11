@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.ui;
+package edu.ntnu.idi.idatt.utils;
 
 /**
  * <h5>Class</h5>

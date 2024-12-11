@@ -24,9 +24,9 @@ import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.requestUnit;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.searchGroceryString;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.searchRecipeString;
 import static edu.ntnu.idi.idatt.ui.UserInterfaceTextSource.welcome;
-import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidByte;
-import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidDouble;
-import static edu.ntnu.idi.idatt.ui.ValidateInput.isValidInt;
+import static edu.ntnu.idi.idatt.utils.ValidateInput.isValidByte;
+import static edu.ntnu.idi.idatt.utils.ValidateInput.isValidDouble;
+import static edu.ntnu.idi.idatt.utils.ValidateInput.isValidInt;
 import static edu.ntnu.idi.idatt.utils.ConvertMeasurement.convertToStandardUnits;
 
 import edu.ntnu.idi.idatt.classes.foodstorage.FoodStorage;

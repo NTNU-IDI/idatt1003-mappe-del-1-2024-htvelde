@@ -75,17 +75,6 @@ public class UserInterfacePrintOut {
    * Prints info about Groceries in an ArrayList.
    *
    * @param arrayList Array to print.
-   */
-  public static void printArrayList(ArrayList<Groceries> arrayList) {
-    arrayList.forEach(m -> print(m.info()));
-  }
-
-  /**
-   * <h5>Method</h5>
-   * <h3>printArrayList()</h3>
-   * Prints info about Groceries in an ArrayList.
-   *
-   * @param arrayList Array to print.
    * @param color Color to each item.
    */
   public static void printArrayList(ArrayList<Groceries> arrayList, String color) {
