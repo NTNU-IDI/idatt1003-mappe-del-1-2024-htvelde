@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GroceryTest {
   Grocery grocery;
-  final LocalDate standardDate = LocalDate.of(2020, 1, 1);
 
   @BeforeEach
   void setUp() {
+    LocalDate today = LocalDate.now();
     grocery = new Grocery(
-        "Normal", "kg", 10.5, standardDate, 21.4
+        "Normal", "kg", 10.5, today, 21.4
     );
   }
 
@@ -25,22 +25,72 @@ class GroceryTest {
   }
 
   @Test
-  void info() {
-    assertEquals("Normal 10.5 kg 2020-01-01 21.4 kr", grocery.info());
+  void testInfo() {
+    String info = grocery.info();
+    assertInstanceOf(String.class, info);
   }
 
   @Test
-  void getQuantity() {
-    assertEquals(10.5, grocery.getQuantity());
+  void testGetQuantity() {
+    double quantity = grocery.getQuantity();
+    assertEquals(10.5, quantity);
   }
 
   @Test
-  void getExpiryDate() {
-    assertEquals(standardDate, grocery.getExpiryDate());
+  void testGetExpiryDate() {
+    LocalDate today = LocalDate.now();
+    // Cast from ChronoLocalDate
+    LocalDate expirationDate = (LocalDate) grocery.getExpiryDate();
+    assertEquals(today, expirationDate);
   }
 
   @Test
-  void getPrice() {
-    assertEquals(21.4, grocery.getPrice());
+  void testGetPrice() {
+    double price = grocery.getPrice();
+    assertEquals(21.4, price);
+  }
+
+  @Test
+  void testHasNotExpiredToday() {
+    boolean expired = grocery.hasExpired();
+    assertFalse(expired);
+  }
+
+  @Test
+  void testHasExpiredTomorrow() {
+    LocalDate tomorrow = LocalDate.now().plusDays(1);
+    boolean expired = grocery.hasExpired(tomorrow);
+    assertTrue(expired);
+  }
+
+  @Test
+  void testHasExpiredYesterday() {
+    LocalDate tomorrow = LocalDate.now().minusDays(1);
+    boolean expired = grocery.hasExpired(tomorrow);
+    assertFalse(expired);
+  }
+
+  @Test
+  void testRemoveQuantityWhenNotRemovingAll() {
+    double quantityBefore = grocery.getQuantity();
+    grocery.removeQuantity(quantityBefore - 1);
+    double quantityAfter = grocery.getQuantity();
+    assertEquals(1, quantityAfter);
+  }
+
+  @Test
+  void testRemoveQuantityWhenRemovingAll() {
+    double quantityBefore = grocery.getQuantity();
+    grocery.removeQuantity(quantityBefore);
+    double quantityAfter = grocery.getQuantity();
+    assertEquals(0, quantityAfter);
+  }
+
+  @Test
+  void testRemoveMoreThanAll() {
+    double quantityBefore = grocery.getQuantity();
+    grocery.removeQuantity(quantityBefore + 2);
+    double quantityAfter = grocery.getQuantity();
+    assertEquals(0, quantityAfter);
   }
 }

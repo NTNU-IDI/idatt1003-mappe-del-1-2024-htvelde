@@ -81,10 +81,11 @@ public class Grocery {
       priceString = String.format("%-7s", groceryPriceStr);
     }
 
+    // No matter how ugly, it shows complete quantity when searched
     String quantityString;
     String groceryQuantityStr = String.format("%.2f", quantity);
     if (groceryQuantityStr.length() > 5) {
-      quantityString = groceryQuantityStr.substring(0, 2) + "...";
+      quantityString = groceryQuantityStr;
     } else {
       quantityString = String.format("%-5s", groceryQuantityStr);
     }
@@ -173,7 +174,11 @@ public class Grocery {
    */
   public void removeQuantity(double quantity) {
     updatePrice(quantity);
-    this.quantity -= quantity;
+    if (quantity >= this.quantity) {
+      this.quantity = 0;
+    } else {
+      this.quantity -= quantity;
+    }
   }
 
   /**
