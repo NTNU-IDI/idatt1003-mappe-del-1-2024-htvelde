@@ -78,7 +78,7 @@ public class UserInterfaceFlow {
    *
    * @param input UserInput takes input from user.
    */
-  private void setInput(UserInput input) {
+  protected void setInput(UserInput input) {
     this.input = input;
   }
 
