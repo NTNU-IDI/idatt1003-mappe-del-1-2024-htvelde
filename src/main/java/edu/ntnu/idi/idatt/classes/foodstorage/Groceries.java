@@ -7,6 +7,7 @@ import static edu.ntnu.idi.idatt.utils.Date.dateToString;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 
 
 /**
@@ -146,13 +147,14 @@ public class Groceries {
     }
 
     double quantityRemaining = quantity;
-    for (Grocery g : groceries) {
-      if (quantityRemaining >= g.getQuantity()) {
 
-        quantityRemaining -= g.getQuantity();
-        groceries.remove(g);
+    // Counts down to avoid size difference after deletion
+    for (int i = groceries.size() - 1; i >= 0 && quantityRemaining > 0; i--) {
+      if (groceries.get(i).getQuantity() < quantityRemaining) {
+        quantityRemaining -= groceries.get(i).getQuantity();
+        groceries.remove(i);
       } else {
-        g.removeQuantity(quantityRemaining);
+        groceries.get(i).removeQuantity(quantityRemaining);
         quantityRemaining = 0;
       }
     }
